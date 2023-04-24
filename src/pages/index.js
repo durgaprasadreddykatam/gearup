@@ -5,7 +5,6 @@ const oswald = Oswald({ subsets: ['latin'],weight:'300'  })
 import Searchbar from './indexcomps/Searchbar'
 import Locations from './indexcomps/Locations'
 import Howitworks from './indexcomps/Howitworks'
-import CalenderforSearch from './indexcomps/CalenderforSearch'
 import Reviews from './indexcomps/Reviews'
 import Faq from './indexcomps/Faq'
 import Fleet from './indexcomps/Fleet'
