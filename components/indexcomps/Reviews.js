@@ -1,6 +1,6 @@
 import React from 'react'
 import Reviewcard from './Reviewcard'
-import reviews from '../../../data/reviewdata'
+import reviews from '../../data/reviewdata'
 
 const Reviews = () => {
     const cardrender = reviews.map((review) => {

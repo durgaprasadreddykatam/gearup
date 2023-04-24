@@ -2,12 +2,12 @@ import Image from 'next/image'
 import { Oswald } from 'next/font/google'
 import main from '../../public/images/rentalpng.png'
 const oswald = Oswald({ subsets: ['latin'],weight:'300'  })
-import Searchbar from './indexcomps/Searchbar'
-import Locations from './indexcomps/Locations'
-import Howitworks from './indexcomps/Howitworks'
-import Reviews from './indexcomps/Reviews'
-import Faq from './indexcomps/Faq'
-import Fleet from './indexcomps/Fleet'
+import Searchbar from '../../components/indexcomps/Searchbar'
+import Locations from '../../components/indexcomps/Locations'
+import Howitworks from '../../components/indexcomps/Howitworks'
+import Reviews from '../../components/indexcomps/Reviews'
+import Faq from '../../components/indexcomps/Faq'
+import Fleet from '../../components/indexcomps/Fleet'
 
 export default function Home() {
   return (

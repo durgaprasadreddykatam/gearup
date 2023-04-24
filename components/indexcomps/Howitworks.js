@@ -1,13 +1,20 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import Howitworks_sub from './Howitworks_sub'
-import data from '../../../data/howitworks.js'
+import data from '../../data/howitworks.js'
 
 const Howitworks = () => {
+  const[propsdata,setpropsdata]=useState([]);
 
-    const renderprocedure = data.map((item) => {
+  useEffect(() => {
+    setpropsdata(data)
+  }, []);
+  console.log(propsdata);
+
+    const renderprocedure = propsdata.map((item) => {
         return(
             <Howitworks_sub
             key={item.id}
+            image={item.image}
             item={item}
             
             />

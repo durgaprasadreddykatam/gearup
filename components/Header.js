@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import Menuoptions from './Headerelements/Menuoptions'
 import Image from 'next/image'
-import menu from '../public//icons/menu.png'
+import menu from '../public/icons/Menu.png'
 import { Concert_One ,Inter,Oswald} from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] });
 const oswald = Oswald({ subsets: ['latin'],weight:'300'  })

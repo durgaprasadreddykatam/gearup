@@ -1,11 +1,11 @@
 import React from 'react'
-import data from '../../../data/Fleetdata'
+import data from '../../data/Fleetdata'
 import Image from 'next/image'
 
 const Fleet = () => {
     const fleetrender=data.map((item =>{
         return(
-            <div className='flex cursor-pointer flex-col  justify-center items-center flex-shrink-0 m-3 '>
+            <div key={item.id} className='flex cursor-pointer flex-col  justify-center items-center flex-shrink-0 m-3 '>
               <div className='text-blue-600 mb-3 font-extrabold text-xl hover:underline hover:underline-offset-2'>{item.name}</div>
               <Image src={item.image} height={500} width={500} className='h-60 w-80 rounded-xl'/>
               <div>Starting From: {item.price}/day</div>

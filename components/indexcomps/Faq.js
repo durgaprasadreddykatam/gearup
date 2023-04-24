@@ -1,10 +1,10 @@
 import React from 'react'
-import data from '../../../data/Faqs_data'
+import data from '../../data/Faqs_data'
 
 const Faq = () => {
     const faqrender=data.map((item =>{
         return(
-            <div className='flex flex-col mb-10'>
+            <div key={item.id} className='flex flex-col mb-10'>
                 <span className='text-2xl mb-4'>{item.question}</span>
                 <span>{item.answer}</span>
             </div>

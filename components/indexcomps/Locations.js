@@ -1,15 +1,19 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import Locationprop from './Locationprop'
-import data from '../../../data/Locations'
+import data from '../../data/Locations'
 
 const Locations = () => {
     const[viewallcities,setviewallcities]=useState(false)
+    const[propsdata,setpropsdata]=useState([]);
+    useEffect(() => {
+        setpropsdata(data)
+    }, []);
 
     function handleClick(id){
         console.log(id)
     }
     
-    const topFourLocations = data.slice(0, 3);
+    const topFourLocations = propsdata.slice(0, 3);
     const rendermin=topFourLocations.map(item => (
         <Locationprop
             key={item.id}
@@ -17,7 +21,7 @@ const Locations = () => {
             handleClick={handleClick}
         />
     ))
-    const renderall=data.map(item => (
+    const renderall=propsdata.map(item => (
         <Locationprop
         key={item.id}
             item={item}

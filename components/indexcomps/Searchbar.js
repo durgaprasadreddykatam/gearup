@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import Image from 'next/image'
-import calender from '../../../public/icons/calender.png'
-import Location from '../../../public/icons/location.png'
+import calender from '../../public/icons/calender.png'
+import Location from '../../public/icons/location.png'
 
 
 

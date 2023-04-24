@@ -1,5 +1,5 @@
 import React from 'react'
-import close from '../../../public/icons/close.png'
+import close from '../../public/icons/close.png'
 import Image from 'next/image'
 
 const CalenderforSearch = (props) => {
