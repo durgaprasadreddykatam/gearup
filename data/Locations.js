@@ -58,12 +58,6 @@ export default
         name: "Jersey City",
         image: image7,
     },
-    {
-        id: 8,
-        name: "Boston",
-        image: image8,
-
-    },
 
     {
         id: 9,
