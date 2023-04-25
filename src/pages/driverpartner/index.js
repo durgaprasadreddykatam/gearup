@@ -10,7 +10,8 @@ const oswald = Oswald({ subsets: ['latin'],weight:'300'  })
 import earnmore from '../../../public/images/cars/earnmore.png'
 import mobile from '../../../public/images/cars/mobile.png'
 import plan from '../../../public/images/cars/plan.png'
-
+import Link from 'next/link'
+//http://localhost:3000/partnerSignup
 const Driverpartner = () => {
   return (
     <>
@@ -26,7 +27,10 @@ const Driverpartner = () => {
           <div className='flex mt-5 p-5 justify-center items-center flex-col md:flex-row'>
                 <div className='flex flex-col justify-center items-center mt-10'>
                   <div className=' flex  text-2xl w-80'>Earn by delivering and returning rental cars when you want. The best part is, you don't need a car!</div>
+                  <Link  target='_blank' href='/partnerSignup'>
                   <button className='h-12 rounded-xl mt-10 mb-3 w-40 bg-blue-500 hover:bg-blue-700 text-white flex items-center justify-center'>SignUp</button>
+                  </Link>
+                  
                   <span>Takes less than 5 minutes!</span>
                 </div>
                 <Image src={image} className='h-80 md:ml-20 w-120'/>
@@ -57,7 +61,9 @@ const Driverpartner = () => {
                 </div>
               </div>
               <div className='flex mt-10 items-center justify-center'>
-                  <button className='h-12 rounded-xl mt-10 mb-3 w-40 bg-blue-500 hover:bg-blue-700 text-white flex items-center justify-center'>SignUp</button>
+                  <Link  target='_blank' href='/partnerSignup'>
+                      <button className='h-12 rounded-xl mt-10 mb-3 w-40 bg-blue-500 hover:bg-blue-700 text-white flex items-center justify-center'>SignUp</button>
+                  </Link>
               </div>
           </div>
 
@@ -100,7 +106,9 @@ const Driverpartner = () => {
               <div className='flex mt-10 flex-col items-center justify-center'>
                 <span className='text-4xl font-extrabold mb-10'>How to Sign Up</span>
                 <span className='md:text-3xl md:w-180'>Complete an application, attend an onboarding session and you are ready to start earning! You must be 25+ years old and have a valid driver's license.</span>
-                <button className='h-12 rounded-xl mt-10 mb-3 w-40 bg-blue-500 hover:bg-blue-700 text-white flex items-center justify-center'>SignUp</button>
+                <Link  target='_blank' href='/partnerSignup'>
+                      <button className='h-12 rounded-xl mt-10 mb-3 w-40 bg-blue-500 hover:bg-blue-700 text-white flex items-center justify-center'>SignUp</button>
+                </Link>
               </div>
           </div>
           {/* reviews */}

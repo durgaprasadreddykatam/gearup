@@ -1,11 +1,15 @@
 import React from 'react'
+import Footer1 from '../../../components/Footer1'
 
 const Faq = () => {
   return (
-    <div>
+    <>
+      <div>
       <span>This is Faq Page</span>
-      
-    </div>
+      </div>
+      <Footer1 />
+    </>
+    
   )
 }
 
