@@ -10,7 +10,9 @@ import Reviews from '../../components/indexcomps/Reviews'
 import Faq from '../../components/indexcomps/Faq'
 import Fleet from '../../components/indexcomps/Fleet'
 
+
 export default function Home() {
+ 
   return (
 <> 
     <div className={`${oswald.className} relative p-5 `}>
