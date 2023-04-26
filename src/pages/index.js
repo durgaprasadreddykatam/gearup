@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Footer1 from '../../components/Footer1'
 import { Oswald } from 'next/font/google'
 import main from '../../public/images/rentalpng.png'
 const oswald = Oswald({ subsets: ['latin'],weight:'300'  })
@@ -9,7 +10,9 @@ import Reviews from '../../components/indexcomps/Reviews'
 import Faq from '../../components/indexcomps/Faq'
 import Fleet from '../../components/indexcomps/Fleet'
 
+
 export default function Home() {
+ 
   return (
 <> 
     <div className={`${oswald.className} relative p-5 `}>
@@ -42,14 +45,16 @@ export default function Home() {
         <div className='mt-5'>
             <Howitworks/>
         </div>
+       
   </div>
 
   <div className={`bg-blue-600 text-white ${oswald.className}`}>
-            <Reviews/>
-      </div>
-      <div className={`  ${oswald.className}`}>
-            <Faq/>
+    <Reviews/>
   </div>
+  <div className={`  ${oswald.className}`}>
+    <Faq/>
+  </div>
+  <Footer1/>
 </>
   )
 }
