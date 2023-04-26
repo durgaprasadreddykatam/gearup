@@ -5,15 +5,14 @@ const concert_one = Concert_One({ subsets: ['latin'], weight:'400' });
 import usflag from '../../../public/icons/usflag.png'
 import Image from 'next/image'
 import data from '../../../data/Locations'
+import { useRouter } from 'next/router';
 
 const PartnerSignup = () => {
-    const [formdata, setFormdata] = useState({});
-
+    const router = useRouter();
+    const [formdata, setFormdata] = useState({firstName:'',lastName:'',email:'',phoneNumber:'',city:'Select'});
     const formvalues = (e) => {
         setFormdata({ ...formdata, [e.target.name]: e.target.value });
     };
-    console.log(formdata);
-
     const [show, setShow] = useState(false);
     const buttontext= show ?  'Collapse Content':'Continue Reading';
     const dropdownvalues= data.map((item)=>{
@@ -21,6 +20,48 @@ const PartnerSignup = () => {
             <option className='' value={item.name}>{item.name}</option>
         )
     })
+    const [properdata,setproperdata]=useState(false);
+
+
+    function Formsubmit(){
+        if(validateFormData(formdata)){
+            const temp=formdata.firstName+" "+formdata.lastName;
+            sessionStorage.setItem('name',temp);
+            router.push('/partnerSignup/sucess');
+        }
+    }
+    function validateFormData(formdata) {
+        const nameRegex = /^[a-zA-Z]+$/; // regex to match only alphabets
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // regex to match proper email format
+        const phoneRegex = /^\d{10}$/; // regex to match 10-digit phone number
+        
+        if (formdata.firstName === "" || !nameRegex.test(formdata.firstName)) {
+          alert("Please enter a valid first name with only alphabets");
+          return false;
+        }
+      
+        if (formdata.lastName === "" || !nameRegex.test(formdata.lastName)) {
+          alert("Please enter a valid last name with only alphabets");
+          return false;
+        }
+      
+        if (formdata.email === "" || !emailRegex.test(formdata.email)) {
+          alert("Please enter a valid email address");
+          return false;
+        }
+      
+        if (formdata.phoneNumber === "" || !phoneRegex.test(formdata.phoneNumber)) {
+          alert("Please enter a valid 10-digit phone number");
+          return false;
+        }
+      
+        if (formdata.city === "Select") {
+          alert("Please select a city");
+          return false;
+        }
+      
+        return true;
+      }
 
   return (
     <>
@@ -62,9 +103,9 @@ const PartnerSignup = () => {
                         name="firstName" 
                         value={formdata.firstName}
                         className='mt-3 border-2 w-full rounded-md h-12 pl-2 ' 
-                        placeholder='FirstName'></input>
+                        placeholder='FirstName' required></input>
                     </div>
-
+                    
                     {/* Last Name */}
 
                     <div className='pl-1  m-2 lg:m-4 lg:w-72'>
@@ -75,7 +116,7 @@ const PartnerSignup = () => {
                         name="lastName"  
                         value={formdata.lastName}
                         className='mt-3 border-2 w-full rounded-md h-12 pl-2 ' 
-                        placeholder='LastName'></input>
+                        placeholder='LastName' required></input>
                     </div>
 
                     {/* Email */}
@@ -89,7 +130,7 @@ const PartnerSignup = () => {
                         name="email"
                         value={formdata.email}  
                         className='mt-3 border-2 w-full rounded-md h-12 pl-2 ' 
-                        placeholder='Email'></input>
+                        placeholder='Email' required></input>
                     </div>
 
                     {/* Phone Number */}
@@ -104,7 +145,7 @@ const PartnerSignup = () => {
                             name="phoneNumber"
                             value={formdata.phoneNumber} 
                             className='focus:outline-none w-full pl-1 h-full rounded-md' 
-                            placeholder='e.g. (201 555-0123)'></input>
+                            placeholder='e.g. (201 555-0123)' required></input>
                         </div>
                     </div> 
 
@@ -114,7 +155,8 @@ const PartnerSignup = () => {
                         <div>
                             <span>WHAT CITY WILL YOU BE SURFING IN?</span>
                         <span className='text-red-500 text-xl'> *</span></div>
-                        <select onChange={formvalues} name='city' value={formdata.city} className='mt-3  border-2 w-full rounded-md h-12 '>
+                        <select required onChange={formvalues} name='city' value={formdata.city} className='mt-3  border-2 w-full rounded-md h-12 '>
+                            <option>Select</option>
                             {dropdownvalues}
                         </select>
                     </div>
@@ -123,7 +165,7 @@ const PartnerSignup = () => {
             <div className='pl-5 pb-10'>By providing us with your phone number and clicking "Submit", you agree that we may call or text you regarding your application. Message & data rates may apply.</div>
         </div>
         <div className='h-20 border-t-2 lg:border-t-0 w-full fixed bottom-0 lg:static bg-white  '>
-        <button className='absolute right-10 lg:right-80 mt-5 bg-blue-500 h-12 w-40 text-white text-xl hover:bg-blue-700 rounded-xl'>Sumbit</button>
+        <button onClick={Formsubmit} className='absolute right-10 lg:right-80 mt-5 bg-blue-500 h-12 w-40 text-white text-xl hover:bg-blue-700 rounded-xl'>Sumbit</button>
         </div>
         
         </div>
@@ -134,3 +176,12 @@ const PartnerSignup = () => {
 }
 
 export default PartnerSignup
+
+PartnerSignup.getLayout = function getLayout(page) {
+    return (
+        <>
+        {page}
+        </>
+        
+    )
+    }
