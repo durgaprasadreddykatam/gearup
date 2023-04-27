@@ -14,5 +14,6 @@ export default async function (req, res) {
         }
     });
     return res.json(updatedata);
+    
     // return res.json(updatedata);
 }

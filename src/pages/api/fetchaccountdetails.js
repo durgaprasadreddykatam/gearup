@@ -12,7 +12,4 @@ export default async function handler(req, res) {
         lastname:fetchdata.Last_Name,
         mobile:fetchdata.mobile,
         id:fetchdata._id
-});
-    
-    
-  }
+});}

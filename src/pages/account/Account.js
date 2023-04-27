@@ -4,6 +4,8 @@ import { Oswald } from 'next/font/google'
 const oswald = Oswald({ subsets: ['latin'],weight:'300'  })
 import axios from 'axios'
 import Footer1 from '../../../components/Footer1';
+import Button1 from '../../../components/Button';
+import {motion as m} from 'framer-motion';
 
 const Account = () => {
     const isAuth = useAuth();
@@ -16,8 +18,15 @@ const Account = () => {
       axios.post('/api/userdataupdate' , {id:userid,userdata:userdata,isActive:true})
       .then((response) => {
         console.log(response.data.acknowledged);
+        setTimeout(()=>{
+          setIsActive(false);
+        },2000);
+        
     }, (error) => {
       console.log(error);
+      setTimeout(()=>{
+        setIsActive(false);
+      },2000);
     });
     }
     function deleteuser(){
@@ -32,7 +41,6 @@ const Account = () => {
       console.log(error);
     });
     }
-
     useEffect(() => {
         const storagedata=JSON.parse(localStorage.getItem('user'));
         if (storagedata && storagedata.userauthenticated) {
@@ -41,11 +49,21 @@ const Account = () => {
             .then((response) => {
               const data1 = {email:response.data.email,mobile:response.data.mobile,firstname:response.data.firstname,lastname:response.data.lastname};
             setUserdata(data1);
-        }, (error) => {
-          console.log(error);
-        });
+           }, (error) => {
+            console.log(error);
+            });
         }
     }, []);
+   // functions for rotating Button
+    const [isActive, setIsActive] = useState(false);
+    const handleClick = () => {
+      setIsActive(!isActive);
+    };
+
+    //function for notification
+
+    
+  
    
     
     
@@ -55,7 +73,12 @@ const Account = () => {
     <>
             {isAuth&& 
             
-            <div className={`p-5 mb-20  ${oswald.className}`}>
+            <m.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.1,ease: "easeOut" }}
+             className={`p-5 mb-20  ${oswald.className}`}>
+              
               
               <div className='p-5 relative flex flex-col lg:items-center lg:justify-center'>
                   
@@ -66,16 +89,21 @@ const Account = () => {
                       <input onChange={Changeuserdata} name='firstname' value={userdata.firstname} className='h-14 lg:w-88 lg:m-3  flex items-center pl-5 rounded-lg  w-full border-2 mt-4'></input>
                       <input onChange={Changeuserdata} name='lastname' value={userdata.lastname} className='h-14 lg:w-88 lg:m-3  flex items-center pl-5 rounded-lg   w-full border-2 mt-4'></input>
                       <div className='w-full lg:mx-3 mt-5 lg:w-184 flex justify-between'>
-                        <button onClick={SaveChanges} className='h-12 w-40 bg-blue-600 rounded-xl text-white'>Save Changes</button>
+                        {isActive && <Button1 isActive={isActive}/>}
+                        {!isActive && <button onClick={()=>{handleClick();SaveChanges()}} className='h-12 w-40 bg-blue-600 rounded-xl text-white'>Save Changes</button>}
                         <button  onClick={deleteuser}  className='h-12 w-40 lg:mr-2 bg-red-600 rounded-xl text-white'>Delete Account</button>
+
+                        {/* Loader Button */}
+                        
                       </div>
+                      
                   </div>
               </div>
               
               
               
             
-            </div>}
+            </m.div>}
             <Footer1/>
     </>
     
