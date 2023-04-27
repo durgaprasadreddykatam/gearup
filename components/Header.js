@@ -6,16 +6,19 @@ import { Concert_One ,Inter,Oswald} from 'next/font/google'
 const oswald = Oswald({ subsets: ['latin'],weight:'300'  })
 const concert_one = Concert_One({ subsets: ['latin'], weight:'400' });
 import Link from 'next/link'
+import Signup from '@/pages/signup'
 
 
 const Header = () => {
     const[isMenuOpen,setIsMenuOpen] = useState(false);
+    
     function menuClick(){
         setIsMenuOpen(!isMenuOpen);
     }
     
   return (
     <>
+    
         <div className='h-16 bg-sky-600 flex justify-between items-center p-5'>
             <div className={`text-3xl text-white ${concert_one.className} `}><Link href='/'>GearUp</Link></div>
             <div className={`hidden lg:block cursor-pointer text-white ${oswald.className} `}>
@@ -30,7 +33,9 @@ const Header = () => {
         <div className='h-full w-full z-10 absolute top-0 bg-white'>
             {<Menuoptions  menuClick={menuClick}/>}
         </div>
+
                 }
+        
     </>
 
     
