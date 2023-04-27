@@ -5,6 +5,8 @@ const oswald = Oswald({ subsets: ['latin'],weight:'300'  })
 const concert_one = Concert_One({ subsets: ['latin'], weight:'400' });
 
 const Menuoptions = (props) => {
+  const storagedata = props.storagedata;
+
   return (
     // Samller Screens
     <div className='flex cursor-pointer flex-col p-5'>

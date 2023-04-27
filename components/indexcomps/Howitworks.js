@@ -8,7 +8,7 @@ const Howitworks = () => {
   useEffect(() => {
     setpropsdata(data)
   }, []);
-  console.log(propsdata);
+  
 
     const renderprocedure = propsdata.map((item) => {
         return(

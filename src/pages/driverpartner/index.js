@@ -148,3 +148,11 @@ const Driverpartner = () => {
 }
 
 export default Driverpartner
+
+Driverpartner.getLayout = function getLayout(page) {
+  return (
+    <>
+      {page}
+    </>
+  )
+}
