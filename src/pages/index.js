@@ -9,12 +9,16 @@ import Howitworks from '../../components/indexcomps/Howitworks'
 import Reviews from '../../components/indexcomps/Reviews'
 import Faq from '../../components/indexcomps/Faq'
 import Fleet from '../../components/indexcomps/Fleet'
+const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+const url=`https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places`
+
 
 
 export default function Home() {
  
   return (
 <> 
+  <script src={url}></script>
     <div className={`${oswald.className} relative p-5 `}>
         {/* <CalenderforSearch/> */}
         <div className='lg:flex lg:justify-between'>

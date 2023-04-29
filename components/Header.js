@@ -58,13 +58,14 @@ const Header = () => {
   return (
     <>
     
-        <div className='h-16 bg-sky-600 flex justify-between items-center p-5'>
+        <div className='h-20 bg-sky-600 flex justify-between items-center p-5'>
             <div className={`text-3xl text-white ${concert_one.className} `}><Link href='/'>GearUp</Link></div>
             <div className={`hidden lg:block cursor-pointer text-white ${oswald.className} `}>
                     <span className='mt-10 m-3 hover:underline hover:underline-offset-2'><Link target='_blank' href='/driverpartner'>Become a Driver Partner</Link></span>
                     <span className='m-3 hover:underline hover:underline-offset-2'><Link href='/carsubscription'>Car Subscription</Link></span>
                     {!isauth && <span className='m-3 hover:underline hover:underline-offset-2'><Link href='/signup'>Sign up | Login</Link></span>}
                     {isauth && <span className='m-3 hover:underline hover:underline-offset-2'><Link href='/account/Account'>{username}</Link></span>}
+                    {isauth && <span className='m-3 hover:underline hover:underline-offset-2'><Link href='/referrals'>Referrals</Link></span>}
                     {isauth && <span className='m-3 hover:underline hover:underline-offset-2'><Link href='/trips/trips'>My Trips</Link></span>}
                     {isauth && <span onClick={Signout} className='m-3 hover:underline hover:underline-offset-2'>Sign Out</span>}
                     <span className='m-3 hover:underline hover:underline-offset-2'><Link href='/Faqs'>FAQ</Link></span>
@@ -83,9 +84,10 @@ const Header = () => {
                     <span onClick={menuClick} className='m-3 hover:underline hover:underline-offset-2'><Link href='/carsubscription'>Car Subscription</Link></span>
                     <span onClick={menuClick} className='m-3 hover:underline hover:underline-offset-2'><Link href='/Faqs'>FAQ</Link></span>
                     {!isauth && <span onClick={menuClick}   className='m-3 hover:underline hover:underline-offset-2'><Link href='/signup'>Sign up | Login</Link></span>}
-                    {isauth &&  <span onClick={menuClick}   className='m-3 hover:underline hover:underline-offset-2'><Link href='/signup'>My Trips</Link></span>}
+                    {isauth &&  <span onClick={menuClick}   className='m-3 hover:underline hover:underline-offset-2'><Link href='/trips/trips'>My Trips</Link></span>}
+                    {isauth && <span  onClick={menuClick}    className='m-3 hover:underline hover:underline-offset-2'><Link href='/referrals'>Referrals</Link></span>}
                     {isauth &&  <span onClick={Signout}   className='m-3 hover:underline hover:underline-offset-2'>Log Out</span>}
-                    {isauth &&  <span className='m-3  hover:underline hover:underline-offset-2'><Link href='/account/Account'>Account Settings</Link></span>}
+                    {isauth &&  <span onClick={menuClick} className='m-3  hover:underline hover:underline-offset-2'><Link href='/account/Account'>Account Settings</Link></span>}
                 </div>
         </div>
 

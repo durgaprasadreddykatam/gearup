@@ -1,12 +1,20 @@
-import React from 'react'
+import React,{useState} from 'react'
+import { Oswald } from 'next/font/google'
+const oswald = Oswald({ subsets: ['latin'],weight:'300'  })
+
 
 const CarSubscription = () => {
+  
+  
   return (
-    <div>
-      <span>This Subscription Page</span>
-      Hi
-      
+    <>
+    <div className={`${oswald.className}`}>
+      This is Car Subscription page
+
     </div>
+      
+    </>
+    
   )
 }
 

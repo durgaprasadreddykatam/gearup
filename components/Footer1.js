@@ -5,6 +5,7 @@ const oswald = Oswald({ subsets: ['latin'],weight:'300'  })
 const concert_one = Concert_One({ subsets: ['latin'], weight:'400' });
 import React, { useState,useEffect } from 'react';
 import { debounce } from 'lodash';
+import {motion as m} from 'framer-motion';
 
 
 const Footer1 = () => {
@@ -49,7 +50,12 @@ const Footer1 = () => {
 
   return (
    <>
-        <div className={`flex flex-col justify-around border-t-2 border-t-slate-500 pt-5 md:flex-row  ${oswald.className}`}>
+        <m.div
+            initial={{ y:"100%" }}
+            animate={{ y:"0%"  }}
+            transition={{ duration: 0.1,ease: "easeInOut" }}
+            
+         className={`flex flex-col justify-around border-t-2 border-t-slate-500 pt-5 md:flex-row overflow-hidden  ${oswald.className}`}>
             <div  className='hidden w-80 pl-20 flex-col md:flex flex-shrink-0'>
                 <div className={`text-3xl mb-5 text-sky-600 ${concert_one.className} `}>GearUp.</div>
                 <div className='mb-4 text-sm'>&copy; Copyright 2023 Gearup</div>
@@ -147,7 +153,7 @@ const Footer1 = () => {
             </div>
 
       
-        </div>
+        </m.div>
    </>
   )
 }
