@@ -140,6 +140,7 @@ const[passworderror,setPassworderror]=useState("");
   }
 })
 }
+
   
   
   
@@ -149,7 +150,7 @@ const[passworderror,setPassworderror]=useState("");
     <div className='w-full sm:h-screen flex  items-center justify-center '>
       {checkuser==="null"&&
           <div className={`w-full relative rounded-lg flex p-5 sm:w-120  items-center flex-col ${oswald.className}` }>
-              <Image className='absolute h-6 w-6 left-6 cursor-pointer' src={close}/>
+              <Image onClick={()=>{router.push('/')}} className='absolute h-6 w-6 left-6 cursor-pointer' src={close}/>
               <div className='text-3xl mt-10 font-bold'>Sign up or Sign in</div>
               <span className='mt-5 text-sm'>Type your email address below and we'll check if you already have an account. Otherwise, we'll quickly create one for you.</span>
               <form className=' w-full flex flex-col'>
@@ -160,6 +161,7 @@ const[passworderror,setPassworderror]=useState("");
                   {!nextbuttonstyle && <div className={`mt-5 h-12  flex items-center justify-center text-white cursor-not-allowed bg-sky-300 font-bold rounded-lg`}>Next</div>}
                   {nextbuttonstyle && <button onClick={Checkemail} className={`mt-5 h-12 text-white bg-sky-500 font-bold rounded-lg `}>Next</button>}
               </form>
+
               <span className='mt-10 text-xs font-light'>By continuing, you agree to GearUp's Terms of Service and Privacy Policy.</span>
           </div>
       }

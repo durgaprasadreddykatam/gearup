@@ -2,6 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 
 
+
 const Locationprop = (props) => {
     return (
         <div onClick={() => props.handleClick(props.item.id)} className='relative flex-shrink-0 overflow-x-auto'>
