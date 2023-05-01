@@ -3,7 +3,7 @@ import { Oswald ,Concert_One } from 'next/font/google'
 const oswald = Oswald({ subsets: ['latin'],weight:'300'  })
 const concert_one = Concert_One({ subsets: ['latin'], weight:'400' });
 import Image from 'next/image';
-import Approved from '../../../public/icons/approved.png'
+import Approved from '../../../public/icons/Approved.png'
 import Link from 'next/link'
 
 const Sucess = () => {

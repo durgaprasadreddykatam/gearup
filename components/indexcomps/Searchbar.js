@@ -11,13 +11,17 @@ const Searchbar = () => {
     const[sameAddress,setSameAddress] = useState(true);
     const [address, setAddress] = useState('');
     const [address1, setAddress1] = useState('');
-    const handleAddressChange = (value) => {
+    const [city,setCity] = useState('');
+    const [city1,setCity1] = useState('');
+    const handleAddressChange = (value,city) => {
         setAddress(value);
+        setCity(city);
       };
-      const handleAddressChange1 = (value) => {
+      const handleAddressChange1 = (value,city) => {
         setAddress1(value);
+        setCity1(city);
       };
-      console.log(address,address1)
+      
     function toggleSameAddress(){
         setSameAddress(!sameAddress);
     }
@@ -35,16 +39,39 @@ const Searchbar = () => {
 
   const minToDateStr = minToDate.toISOString().substr(0, 10);
     const addresstext = sameAddress ? 'Delivery & Return location' : 'Delivery location'
-    const[todate,setToDate] = useState('')
+    const[todate,setToDate] = useState('');
+
+    const [errormessage, setErrorMessage] = useState('');
+
     const handleSearch = () => {
-        console.log("from address:"+address,"Toaddress:"+address1,"fromdate:"+fromDate,"fromdate:"+todate,sameAddress);
-        router.push('/CarPickerPage')
-        // router.push('/')
+        const fromDateObj = new Date(fromDate);
+        const toDateObj = new Date(todate);
+
+    if (sameAddress) {
+        if (city === '' || fromDate === '' || todate === '') {
+        setErrorMessage('Please fill in all the required fields');
+        } else if (fromDateObj >= toDateObj) {
+        setErrorMessage('Please select a valid return date');
+        } else {
+        router.push('/CarPickerPage');
+        }
+    } else {
+        if (city === '' || city1 === '' || fromDate === '' || todate === '') {
+        setErrorMessage('Please fill in all the required fields');
+        } else if (fromDateObj >= toDateObj) {
+        setErrorMessage('Please select a valid return date');
+        } else {
+        router.push('/CarPickerPage');
+        }
     }
+    };
+    
+
+    
     
 
   return (
-    <> 
+    <>
      
         <div className='flex mt-16 p-5 flex-col'>
 

@@ -62,15 +62,15 @@ const LocationDetails = () => {
                                 
                                 </div>}
                             {!pageload && <div className='w-full my-5 h-120 rounded-2xl  lg:my-0 lg:mx-5 lg:w-1/2 '>
-                            
+                                <Image src={`/images/${id}/${best6.id}.jpeg`} height={500} width={500} alt=''className='w-full h-120 rounded-2xl '/>
                                 </div>}
-                            <div className='w-full relative flex flex-col bg-sky-300 text-white my-5 h-120 rounded-2xl p-3 lg:my-0 lg:mx-5 lg:w-1/2'>
+                            <div className='w-full relative flex flex-col bg-green-600 text-white my-5 h-120 rounded-2xl p-3 lg:my-0 lg:mx-5 lg:w-1/2'>
                                 <div className='font-extrabold text-4xl'>{best6.name}</div>
                                 <div className='mt-5 text-xl font-bold'>Travel Time: {best6.Travel_time}</div>
                                 <div className='mt-5'>{best6.description}</div>
-                                <div className='absolute bottom-7 w-5/6'>
-                                    button
-                                    recommendation
+                                <div className='absolute flex justify-around items-center bottom-7 w-5/6'>
+                                    <buton className='h-12 flex hover:bg-blue-400 cursor-pointer items-center justify-center rounded-xl w-32 bg-blue-600'>Book a Car</buton>
+                                    <span className='text-black  text-xl font-black'>Recommended Car: <span className=''>{best6.recommended_car}</span> </span>
                                 </div>
                             </div>
                         </div>
