@@ -5,6 +5,8 @@ import data from '../../../data/Checkoutdata';
 import { Oswald } from 'next/font/google'
 const oswald = Oswald({ subsets: ['latin'],weight:'300'  })
 import Image from 'next/image.js';
+import Coverage from '../../../components/checkoutcomps/Coverage';
+import Deliveryprocess from '../../../components/checkoutcomps/Deliveryprocess';
 
 
 const Checkout = () => {
@@ -44,7 +46,7 @@ const Checkout = () => {
             </div>
         </div>
         <div className='flex flex-col border-b-2 border-b-gray-400 pb-5'>
-          <div className='text-2xl py-5'>Where & When</div>
+          <div className='text-2xl py-5 font-extrabold'>Where & When</div>
           <div className='flex items-center'>
             <Image src={`/icons/pickuplocation.png`} alt='' width={90} height={90} className='h-5 mr-4 w-5'/>
             <div>{searchdata.address}</div>
@@ -63,8 +65,8 @@ const Checkout = () => {
           </div>
           <div className='mt-3'>Be ready to receive your Car +/- 15 min of the scheduled time</div>
         </div>
-        <div>Delivery process</div>
-        <div>Coverage</div>
+        <Deliveryprocess/>
+        <Coverage item={checkoutdata}/>
         <div>Extras</div>
         <div>Drivers</div>
         <div>Deposit policy</div>
