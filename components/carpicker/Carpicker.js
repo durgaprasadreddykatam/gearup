@@ -4,6 +4,7 @@ import uparrow from '../../public/icons/uparrow.png'
 
 const Carpicker = (props) => {
     const[car,setCar] = React.useState(1);
+    const [showDetails, setShowDetails] = React.useState(false);
     const[dispsides,setDispsides] = React.useState(false);
     function Clickedleft(){
         if(car===1){
@@ -43,7 +44,7 @@ const Carpicker = (props) => {
                         <div className='text-xl font-extrabold'>{props.name}</div>
                         <div className=''>{props.item.description}</div>
                         <div className='text-gray-500 text-sm'>{props.item.capacity} Seats . {props.item.luggage} suitcases</div>
-                        <div className='cursor-pointer text-blue-700 font-extrabold'>See Details</div>
+                        <div onClick={()=>{props.handledetails(props.item.id)}} className='cursor-pointer text-blue-700 font-extrabold'>See Details</div>
                         </div>
                         
                         <div className='hidden lg:block text-xs'>{props.item.explain}</div>
@@ -51,10 +52,15 @@ const Carpicker = (props) => {
         </div>
                     
                     
-                    <div className='text-blue-600 py-5 flex flex-col justify-between flex-shrink-0'>
-                        <div>Starts at ${props.price} per day</div>
-                        <button onClick={()=>{props.handleclick(props.item.id)}} className='text-white h-12 w-40 bg-blue-500 rounded-xl'>Select</button>
+                    <div className='py-5 flex flex-col justify-between flex-shrink-0'>
+                        <div>
+                        <div className='text-blue-600 '>Starts at ${props.price} per day</div>
+                        <div className='text-xs'>excl. coverage, delivery, tax</div>
+                        </div>
+                        
+                        <button onClick={()=>{props.handleclick(props.item.id)}} className='text-white hover:bg-blue-600 h-12 w-40 bg-blue-500 rounded-xl'>Select</button>
                     </div>
+                    
       
     </div>
   )

@@ -73,7 +73,7 @@ const Header = () => {
             <Image onClick={menuClick} className='block lg:hidden h-7 w-7 cursor-pointer invert' src={menu} width={500} height={500} alt='menu'/>
         </div>
             {isMenuOpen && 
-        <div className='h-full w-full z-10 absolute top-0 bg-white'>
+        <div className='h-full w-full z-50 absolute top-0 bg-white'>
             {/* {<Menuoptions  menuClick={menuClick} isauth={isauth} username={username} />} */}
                 <div className={`flex cursor-pointer flex-col p-5 ${oswald.className}`}>
                     <Image  onClick={menuClick}  src={close} alt='' height={100} width={100} className=' h-8 w-8 absolute cursor-pointer right-8 top-8'/>

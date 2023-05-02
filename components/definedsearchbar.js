@@ -1,18 +1,17 @@
 import React,{useState} from 'react'
-import Image from 'next/image'
-import calender from '../../public/icons/calender.png'
-import Location from '../../public/icons/location.png'
-import Addresssearch from './Addresssearch'
-import Sameaddresstoggle from './Sameaddresstoggle'
+import Addresssearch from './indexcomps/Addresssearch'
+import Sameaddresstoggle from './indexcomps/Sameaddresstoggle'
 import { useRouter } from 'next/router'
+import { Oswald } from 'next/font/google'
+const oswald = Oswald({ subsets: ['latin'],weight:'300'  })
 
-const Searchbar = () => {
+const DefinedSearchbar = (props) => {
     const router=useRouter();
     const[sameAddress,setSameAddress] = useState(true);
-    const [address, setAddress] = useState('');
-    const [address1, setAddress1] = useState('');
-    const [city,setCity] = useState('');
-    const [city1,setCity1] = useState('');
+    const [address, setAddress] = useState(props.item.address);
+    const [address1, setAddress1] = props.item.isSameaddress ? useState(props.address1): useState('');
+    const [city,setCity] = useState(props.item.city);
+    const [city1,setCity1] = props.item.isSameaddress ? useState(props.item.city1): useState('');
     const handleAddressChange = (value,city) => {
         setAddress(value);
         setCity(city);
@@ -25,7 +24,7 @@ const Searchbar = () => {
     function toggleSameAddress(){
         setSameAddress(!sameAddress);
     }
-    const [fromDate, setFromDate] = useState(getCurrentDate());
+    const [fromDate, setFromDate] =props.item.fromDate ? useState(props.item.fromDate) :useState(getCurrentDate());
 
   function getCurrentDate() {
     const date = new Date();
@@ -39,7 +38,7 @@ const Searchbar = () => {
 
   const minToDateStr = minToDate.toISOString().substr(0, 10);
     const addresstext = sameAddress ? 'Delivery & Return location' : 'Delivery location'
-    const[todate,setToDate] = useState('');
+    const[todate,setToDate] = props.item.todate ? useState(props.item.todate) :useState('');
 
     const [errormessage, setErrorMessage] = useState('');
 
@@ -53,13 +52,13 @@ const Searchbar = () => {
         } else if (fromDateObj >= toDateObj) {
         setErrorMessage('Please select a valid return date');
         } else {
-        router.push({pathname:'/CarPickerPage',
-        query:{ address:address,
-                city:city,
-                fromDate:fromDate,
-                todate:todate,
-                isSameaddress:sameAddress,}
-                });
+            router.push({pathname:'/CarPickerPage',
+            query:{ address:address,
+                    city:city,
+                    fromDate:fromDate,
+                    todate:todate,
+                    isSameaddress:sameAddress,}
+                    });
         }
     } else {
         if (city === '' || city1 === '' || fromDate === '' || todate === '') {
@@ -76,7 +75,7 @@ const Searchbar = () => {
                     city1: city1,
                     fromDate: fromDate,
                     todate: todate,
-                    isSameaddress:sameAddress,
+                    isSameaddress: sameAddress,
                 }
               });
         }
@@ -90,7 +89,7 @@ const Searchbar = () => {
   return (
     <>
      
-        <div className='flex mt-16 p-5 flex-col'>
+        <div className={`${oswald.className} flex mt-16 p-5 flex-col`}>
 
             <div className={`border-1 ${sameAddress ? `h-20`: `h-40`}lg:h-20 flex flex-col items-center lg:flex-row rounded-xl`}>
 
@@ -133,5 +132,5 @@ const Searchbar = () => {
     </>
 
   )}
-  export default Searchbar
+  export default DefinedSearchbar
 
