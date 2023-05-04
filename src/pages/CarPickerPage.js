@@ -74,7 +74,7 @@ const CarPickerPage = () => {
   return (
     <>
     <script src={url}></script>
-      {editdates && <DefinedSearchbar address="610" isSameaddress='true' item={searchdata}/>}
+      {editdates && <DefinedSearchbar  isSameaddress='true' item={searchdata}/>}
         <div key="car-picker-page" className={`${oswald.className} md:p-20 p-5 relative  w-full`}>
           {!editdates && <div className='mb-10'>
           <div className='flex justify-center items-center text-xl text-blue-600'>{searchdata.address}</div>

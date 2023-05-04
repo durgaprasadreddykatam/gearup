@@ -55,7 +55,7 @@ const Footer1 = () => {
             animate={{ y:"0%"  }}
             transition={{ duration: 0.1,ease: "easeInOut" }}
             
-         className={`flex flex-col justify-around border-t-2 border-t-slate-500 pt-5 md:flex-row overflow-hidden  ${oswald.className}`}>
+         className={`flex z-0 flex-col justify-around border-t-2 border-t-slate-500 pt-5 md:flex-row overflow-hidden  ${oswald.className}`}>
             <div  className='hidden w-80 pl-20 flex-col md:flex flex-shrink-0'>
                 <div className={`text-3xl mb-5 text-sky-600 ${concert_one.className} `}>GearUp.</div>
                 <div className='mb-4 text-sm'>&copy; Copyright 2023 Gearup</div>
