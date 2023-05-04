@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{useState,useEffect} from 'react'
 import { useRouter } from 'next/router'
 import Footer1 from '../../../components/Footer1';
 import data from '../../../data/Checkoutdata';
@@ -13,8 +13,8 @@ import Drivers from '../../../components/checkoutcomps/Drivers';
 import Deposit_policy from '../../../components/checkoutcomps/Deposit_policy';
 import Minage from '../../../components/checkoutcomps/Minage';
 import CancellationPolicy from '../../../components/checkoutcomps/CancellationPolicy';
-import Payementmethod from '../../../components/checkoutcomps/Payementmethod';
 import DriverInfo from '../../../components/checkoutcomps/DriverInfo';
+
 
 
 const Checkout = () => {
@@ -23,6 +23,8 @@ const Checkout = () => {
   React.useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
     setUserdata(user);
+    if(user){setAuthenticated(user.userauthenticated);}
+    
     
   }, []);
     const [checkoutdata, setCheckoutdata] = React.useState({});
@@ -48,12 +50,9 @@ const Checkout = () => {
 
       setInsurance(value);
     }
-   
-    
     const router = useRouter();
     const carid  = router.query.carid;
     const searchdata=router.query;
-    
     const fromdate = new Date(searchdata.fromDate);
     const todate = new Date(searchdata.todate);
     const formatted_fromdate = fromdate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -61,7 +60,6 @@ const Checkout = () => {
     const days= Math.ceil((todate-fromdate)/(1000*60*60*24));
     const baseprice=Math.round(checkoutdata.price*days*100)/100;
     const salestax=Math.round(baseprice*0.07* 100) / 100;;
-    
     let youngrenterfee=0;
     if(agemorethan25){
       youngrenterfee=Math.round(checkoutdata.young_renter_fee*days*100)/100;
@@ -78,7 +76,6 @@ const Checkout = () => {
     } else if (insurance === "I_have_my_own") {
       insuranceprice = checkoutdata.I_have_my_own * days;
     }
-    
     const finalprice=baseprice+salestax+youngrenterfee+unlimitedmilesfee+insuranceprice;
     React.useEffect(() => {
       if (popup) {
@@ -105,9 +102,10 @@ const Checkout = () => {
         }
       })
     }
-
+    
   return (
     <>
+    <script src="https://js.stripe.com/v3/"></script>
     <div className={` ${oswald.className}  p-5 flex flex-col`}>
          {/* only for small screens */}
         <div className='flex justify-between pb-5 border-b-gray-400 border-b-2 lg:border-b-0'>
@@ -152,18 +150,18 @@ const Checkout = () => {
                 <Deliveryprocess Popup={Popup} userdata={userdata} popup={popup}/>
                 <Coverage coverage={insurance} userdata={userdata} Insurance={Insurance} item={checkoutdata}/>
                  <Extras item={checkoutdata} userdata={userdata} unlimitedmiles={unlimitedmiles} handleunlimitedmiles={UnlimitedMiles}/>
-                <Drivers agemorethan25={agemorethan25} Agemorethan25={Agemorethan25} Popup={Popup} userdata={userdata}  />
+                <Drivers agemorethan25={agemorethan25} Agemorethan25={Agemorethan25} Popup={Popup} authenticated={authenticated} userdata={userdata}  />
                 <Deposit_policy/>
                 <Minage Popup={Popup} userdata={userdata}/>
                 <CancellationPolicy/>
-                <Payementmethod userdata={userdata}/>
+                
           </div>
 
 
           {/* larger Screens */}
 
 
-          <div className=' hidden lg:flex ml-10 flex-col w-100 bg-slate-50 flex-shrink-0 p-10 rounded-xl border-1 border-gray-500'>
+          <div className=' h-fit hidden lg:flex ml-10 flex-col w-100 bg-slate-50 flex-shrink-0 p-10 rounded-xl border-1 border-gray-500'>
               <div className='flex flex-col  border-b-gray-400 pb-5'>
                       <div className='text-2xl py-5 font-extrabold'>Where & When</div>
                       <div className='text-lg mb-5'>Delivery Info</div>
@@ -176,11 +174,18 @@ const Checkout = () => {
                       <span className='text-blue-600'>{formatted_todate}</span>
                       <div className='mt-3'>Be ready to receive your Car +/- 15 min of the scheduled time</div>
                 </div>
-                <DriverInfo driverinfo={driverinfo} HandleDriverinfo={HandleDriverinfo}/>
-                <div>Payment Method</div>
-                <div>Total Price</div>
+                {!authenticated && <DriverInfo driverinfo={driverinfo} HandleDriverinfo={HandleDriverinfo}/>}
                 
 
+
+
+                <div className='flex flex-col mt-5'>
+                  <div className='flex justify-between'>
+                    <div className='text-lg font-extrabold'>Total Price</div>
+                    <div>${finalprice}</div>
+                  </div>
+                  <div className='mt-5 text-blue-600 font-extrabold cursor-pointer'>See Price Details</div>
+                </div>
           </div>
         </div>
         
@@ -193,7 +198,7 @@ const Checkout = () => {
             </div>
             <div>${finalprice}</div>
           </div>
-          <button className='bg-blue-500 hover:bg-blue-700 text-white h-12 w-40 rounded-xl'>{buttontext}</button>
+          <button  className='bg-blue-500 hover:bg-blue-700 text-white h-12 w-40 rounded-xl'>{buttontext}</button>
         </div>
         <Footer1/>
        

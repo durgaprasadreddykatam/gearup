@@ -9,23 +9,24 @@ const Drivers = (props) => {
     props.Popup();
   }
   const userdata=props.userdata;
-  const authenticated=userdata.authenticated;
+  const authenticated=props.authenticated;
   let name;
+  if(authenticated){
   if(userdata.username){
-      name=(userdata.username.substring(0, 1));}
+      name=(userdata.username.substring(0, 1));}}
   
   return (
     <div className='flex flex-col border-b-2 py-5 border-b-gray-500'>
       <div className='text-2xl mb-5'>Drivers</div>
       <div className='flex items-center'>
-        <div className='flex h-12 w-12 rounded-full items-center justify-center bg-red-200 font-extrabold' >{name}</div>
+        <div className='flex h-12 w-12 rounded-full items-center justify-center bg-red-200 font-extrabold' >{authenticated ? name : 'Y'}</div>
         <div className='ml-5'>
             <div><div>{authenticated ? userdata.username : 'You'}</div></div>
             <div className='text-red-500'>{authenticated ? 'Authenticated' : 'Please Authenticate to continue'}</div>
         </div>
       </div>
       <div className='flex items-center mt-4'>
-        <input onChange={props.Agemorethan25} isChecked='props.agemorethan25' type='checkbox'></input>
+        <input onChange={props.Agemorethan25} ischecked='props.agemorethan25' type='checkbox'></input>
         <div className='ml-3'>I am under 25 years old</div>
       </div>
       <div className='text-sm text-gray-600 mt-2'>Driver’s License verification is required, you’ll receive instructions after payment.</div>
