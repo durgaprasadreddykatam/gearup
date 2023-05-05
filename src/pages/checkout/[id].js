@@ -7,35 +7,48 @@ const oswald = Oswald({ subsets: ['latin'],weight:'300'  })
 import Image from 'next/image.js';
 import Coverage from '../../../components/checkoutcomps/Coverage';
 import Deliveryprocess from '../../../components/checkoutcomps/Deliveryprocess';
-import Popup from '../../../components/Popup';
 import Extras from '../../../components/checkoutcomps/Extras';
 import Drivers from '../../../components/checkoutcomps/Drivers';
 import Deposit_policy from '../../../components/checkoutcomps/Deposit_policy';
 import Minage from '../../../components/checkoutcomps/Minage';
 import CancellationPolicy from '../../../components/checkoutcomps/CancellationPolicy';
 import DriverInfo from '../../../components/checkoutcomps/DriverInfo';
-
-
+import Indexcomp from '../../../components/stripe/Indexcomp';
+import axios from 'axios';
 
 const Checkout = () => {
   const[userdata,setUserdata]=React.useState({});
   const[authenticated,setAuthenticated]=React.useState(false);
+  // initial load and getting data from local storage
+  const[loginuserinfo,setLoginuserinfo]=React.useState({});
   React.useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
     setUserdata(user);
-    if(user){setAuthenticated(user.userauthenticated);}
-    
-    
-  }, []);
-    const [checkoutdata, setCheckoutdata] = React.useState({});
-    const[popup,setPopup]=React.useState(false);
-    function Popup(){
-      setPopup(!popup);
-    }
+    if(user){
+      setAuthenticated(user.userauthenticated);
+      axios.post('/api/Checkout', {userid:user.id})
+      .then((res) => {
+        if(res.data.message==="success"){
+        setLoginuserinfo(res.data.data);}
+      },
+      (error) => {
+        console.log(error);
+      }
 
+
+      );
+    }
+  }, []);
+  
+
+    const [checkoutdata, setCheckoutdata] = React.useState({});
+    const[popupv,setPopup]=React.useState(false);
+    function Popup(){
+      setPopup(!popupv);
+    }
+    
     React.useEffect(() => {
         setCheckoutdata(data);
-
     }, []);
     const [unlimitedmiles, setUnlimitedmiles] = React.useState(false);
     function UnlimitedMiles(){
@@ -47,51 +60,73 @@ const Checkout = () => {
     };
     const[insurance,setInsurance]=React.useState('');
     function Insurance(value){
-
-      setInsurance(value);
+       setInsurance(value);
+       if (insurance === "Essential_Coverage") {
+        setInsuranceprice(Math.round((checkoutdata.Essential_Coverage * days)*100)/100);
+      } else if (insurance === "Standard_Coverage") {
+        setInsuranceprice(Math.round((checkoutdata.Standard_Coverage * days)*100)/100);
+      } else if (insurance === "I_have_my_own") {
+        setInsuranceprice(Math.round((checkoutdata.I_have_my_own * days)*100)/100);
+      } else if (insurance === "") {
+        setInsuranceprice(0);
+      }
     }
     const router = useRouter();
-    const carid  = router.query.carid;
     const searchdata=router.query;
+    console.log(searchdata);
     const fromdate = new Date(searchdata.fromDate);
     const todate = new Date(searchdata.todate);
     const formatted_fromdate = fromdate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
     const formatted_todate = todate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
-    const days= Math.ceil((todate-fromdate)/(1000*60*60*24));
+    const days= searchdata.no_of_days;
     const baseprice=Math.round(checkoutdata.price*days*100)/100;
-    const salestax=Math.round(baseprice*0.07* 100) / 100;;
-    let youngrenterfee=0;
-    if(agemorethan25){
-      youngrenterfee=Math.round(checkoutdata.young_renter_fee*days*100)/100;
-    }
-    let unlimitedmilesfee=0;
-    if(unlimitedmiles){
-      unlimitedmilesfee=Math.round(checkoutdata.unlimited_miles_per_day*days*100)/100;
-    }
-    let insuranceprice = 0;
-    if (insurance === "Essential_Coverage") {
-    insuranceprice = checkoutdata.Essential_Coverage * days;
-    } else if (insurance === "Standard_Coverage") {
-    insuranceprice = checkoutdata.Standard_Coverage * days;
-    } else if (insurance === "I_have_my_own") {
-      insuranceprice = checkoutdata.I_have_my_own * days;
-    }
-    const finalprice=baseprice+salestax+youngrenterfee+unlimitedmilesfee+insuranceprice;
+    const salestax=Math.round(baseprice*0.07* 100) / 100;
+
+    //Young Renter Fee
+    const [youngrenterfee,setYoungrenterfee]=React.useState(0);
+    useEffect(() => {
+      if(agemorethan25){
+        setYoungrenterfee(Math.round(checkoutdata.young_renter_fee*days*100)/100);
+      }else{
+        setYoungrenterfee(0);
+      }
+    }, [agemorethan25]);
+   
+    //Unlimited Miles Fee
+    const [unlimitedmilesfee,setUnlimitedmilesfee]=React.useState(0);
+
+    useEffect(() => {
+      if(unlimitedmiles){
+        setUnlimitedmilesfee(Math.round(checkoutdata.unlimited_miles_per_day*days*100)/100);
+      }else{
+        setUnlimitedmilesfee(0);
+      }
+    }, [unlimitedmiles]);
+
+    //Insurance Price
+    const[insuranceprice,setInsuranceprice]=React.useState(0);
+
+    useEffect(() => {
+      if (insurance === "Essential_Coverage") {
+        setInsuranceprice(Math.round((checkoutdata.Essential_Coverage * days)*100)/100);
+      } else if (insurance === "Standard_Coverage") {
+        setInsuranceprice(Math.round((checkoutdata.Standard_Coverage * days)*100)/100);
+      } else if (insurance === "I_have_my_own") {
+        setInsuranceprice(Math.round((checkoutdata.I_have_my_own * days)*100)/100);
+      } else if (insurance === "") {
+        setInsuranceprice(0);
+      }
+    }, [insurance]);
+    
     React.useEffect(() => {
-      if (popup) {
+      if (popupv) {
         document.body.style.overflow = 'hidden';
       } else {
         document.body.style.overflow = 'auto';
       }
-    }, [popup]);
-    const[buttontext,setButtontext]=React.useState();
-    React.useEffect(() => {
-      if (insurance === '') {
-        setButtontext('Select Coverage');
-      } else {
-        setButtontext('Book & Pay');
-      }
-    }, [insurance]);
+    }, [popupv]);
+    
+
     const[driverinfo,setDriverinfo]=React.useState({firstname:'',lastname:'',email:'',confirmemail:'',phonenumber:''});
     function HandleDriverinfo(event){
       const{name,value}=event.target;
@@ -102,6 +137,38 @@ const Checkout = () => {
         }
       })
     }
+const [finalprice, setFinalprice] = React.useState(Math.round((baseprice+salestax+youngrenterfee+unlimitedmilesfee+insuranceprice)*100)/100);
+const [stripefinalprice, setStripeFinalprice] = React.useState(Math.round((baseprice+salestax+youngrenterfee+unlimitedmilesfee+insuranceprice)*100));
+
+useEffect(() => {
+  setFinalprice(Math.round((baseprice+salestax+youngrenterfee+unlimitedmilesfee+insuranceprice)*100)/100);
+  setStripeFinalprice(Math.round((baseprice+salestax+youngrenterfee+unlimitedmilesfee+insuranceprice)*100));
+}, [baseprice,salestax,youngrenterfee,unlimitedmilesfee,insuranceprice]);
+
+
+
+
+
+//stripedata data that need to send to stripe comp as props
+
+const stripedata = authenticated ? {
+                                    email:loginuserinfo.email,
+                                    name:loginuserinfo.first_name+" "+loginuserinfo.last_name,
+                                    DeliveryAddress:searchdata.address,
+                                    DeliveryCity:searchdata.city,
+                                    DeliveryDate:searchdata.fromDate,
+                                    PhoneNumber:loginuserinfo.mobile,
+                            
+                                  }:{
+                                    email:driverinfo.email,
+                                    PhoneNumber:driverinfo.phonenumber,
+                                    name:driverinfo.firstname+" "+driverinfo.lastname,
+                                    DeliveryAddress:searchdata.address,
+                                    DeliveryCity:searchdata.city,
+                                    DeliveryDate:searchdata.fromDate,
+                                    
+                                  }
+  console.log(stripedata);
     
   return (
     <>
@@ -147,7 +214,7 @@ const Checkout = () => {
                   </div>
                   <div className='mt-3'>Be ready to receive your Car +/- 15 min of the scheduled time</div>
                 </div>
-                <Deliveryprocess Popup={Popup} userdata={userdata} popup={popup}/>
+                <Deliveryprocess Popup={Popup} userdata={userdata} popupv={popupv}/>
                 <Coverage coverage={insurance} userdata={userdata} Insurance={Insurance} item={checkoutdata}/>
                  <Extras item={checkoutdata} userdata={userdata} unlimitedmiles={unlimitedmiles} handleunlimitedmiles={UnlimitedMiles}/>
                 <Drivers agemorethan25={agemorethan25} Agemorethan25={Agemorethan25} Popup={Popup} authenticated={authenticated} userdata={userdata}  />
@@ -175,6 +242,10 @@ const Checkout = () => {
                       <div className='mt-3'>Be ready to receive your Car +/- 15 min of the scheduled time</div>
                 </div>
                 {!authenticated && <DriverInfo driverinfo={driverinfo} HandleDriverinfo={HandleDriverinfo}/>}
+                {finalprice !== 0 ? <Indexcomp amount={stripefinalprice} stripedata={stripedata} /> : null}
+
+
+
                 
 
 
@@ -190,7 +261,7 @@ const Checkout = () => {
         </div>
         
         
-        <div className={`${popup ? `static `:`fixed`} flex lg:hidden justify-between items-center bottom-0 h-32 z-40 w-full p-10 bg-white`}>
+        <div className={`${popupv ? `static `:`fixed`} flex lg:hidden justify-between items-center bottom-0 h-32 z-40 w-full p-10 bg-white`}>
           <div>
             <div className='flex items-center'>
               <div className='text-2xl'>Total Price</div>
@@ -198,7 +269,7 @@ const Checkout = () => {
             </div>
             <div>${finalprice}</div>
           </div>
-          <button  className='bg-blue-500 hover:bg-blue-700 text-white h-12 w-40 rounded-xl'>{buttontext}</button>
+          
         </div>
         <Footer1/>
        

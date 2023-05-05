@@ -2,7 +2,7 @@ import React from 'react'
 
 const Coverage = (props) => {
     const coverage=props.coverage;
-    console.log(coverage);
+
     
     
   return (

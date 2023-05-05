@@ -34,7 +34,7 @@ const CarPickerPage = () => {
       pathname: `/checkout/${id}`,
       query: {
         ...searchdata,
-        carid: id
+        carid: id,
       }
     });
   }

@@ -39,54 +39,65 @@ const DefinedSearchbar = (props) => {
   const minToDateStr = minToDate.toISOString().substr(0, 10);
     const addresstext = sameAddress ? 'Delivery & Return location' : 'Delivery location'
     const[todate,setToDate] = props.item.todate ? useState(props.item.todate) :useState('');
-
-    const [errormessage, setErrorMessage] = useState('');
-
-    const handleSearch = () => {
-        const fromDateObj = new Date(fromDate);
-        const toDateObj = new Date(todate);
-
-    if (sameAddress) {
-        if (city === '' || fromDate === '' || todate === '') {
-        setErrorMessage('Please fill in all the required fields');
-        } else if (fromDateObj >= toDateObj) {
-        setErrorMessage('Please select a valid return date');
-        } else {
-            router.push({pathname:'/CarPickerPage',
-            query:{ address:address,
-                    city:city,
-                    fromDate:fromDate,
-                    todate:todate,
-                    isSameaddress:sameAddress,}
-                    });
-        }
-    } else {
-        if (city === '' || city1 === '' || fromDate === '' || todate === '') {
-        setErrorMessage('Please fill in all the required fields');
-        } else if (fromDateObj >= toDateObj) {
-        setErrorMessage('Please select a valid return date');
-        } else {
-            router.push({
-                pathname: '/CarPickerPage',
-                query: {
-                    address: address,
-                    address1: address1,
-                    city: city,
-                    city1: city1,
-                    fromDate: fromDate,
-                    todate: todate,
-                    isSameaddress: sameAddress,
-                }
-              });
-        }
+    const[fromDateObj,setFromdateobj] = useState(new Date(fromDate));
+    const[toDateObj,setTodateobj] = useState(new Date(fromDate));
+    fromDateObj.setMinutes(fromDateObj.getMinutes() + fromDateObj.getTimezoneOffset());
+    toDateObj.setMinutes(toDateObj.getMinutes() + toDateObj.getTimezoneOffset());
+    function FromdateChange(event){
+        setFromDate(event.target.value);
+        setFromdateobj(new Date(event.target.value));
     }
+    function TodateChange(event){
+        setToDate(event.target.value)
+        setTodateobj(new Date(event.target.value));
+    }
+    const [errormessage, setErrorMessage] = useState('');
+    const handleSearch = () => {
+        if (sameAddress) {
+            if (city === '' || fromDate === '' || todate === '') {
+                setErrorMessage('Please fill in all the required fields');
+            } else if (fromDateObj >= toDateObj) {
+                setErrorMessage('Please select a valid return date');
+            } else {
+                router.push({
+                    pathname: '/CarPickerPage',
+                    query: {
+                        address: address,
+                        city: city,
+                        fromDate: fromDate,
+                        todate: todate,
+                        isSameaddress: sameAddress,
+                        fromDateObj: fromDateObj.toISOString(),
+                        toDateObj: toDateObj.toISOString(),
+                        no_of_days: Math.ceil((toDateObj - fromDateObj) / (1000 * 3600 * 24)) 
+                    },
+                });
+            }
+        } else {
+            if (city === '' || city1 === '' || fromDate === '' || todate === '') {
+                setErrorMessage('Please fill in all the required fields');
+            } else if (fromDateObj >= toDateObj) {
+                setErrorMessage('Please select a valid return date');
+            } else {
+                router.push({
+                    pathname: '/CarPickerPage',
+                    query: {
+                        address: address,
+                        address1: address1,
+                        city: city,
+                        city1: city1,
+                        fromDate: fromDate,
+                        todate: todate,
+                        isSameaddress: sameAddress,
+                        fromDateObj: fromDateObj.toISOString(),
+                        toDateObj: toDateObj.toISOString(),
+                        no_of_days: Math.ceil((toDateObj - fromDateObj) / (1000 * 3600 * 24)) 
+                    },
+                });
+            }
+        }
     };
-    
-
-    
-    
-
-  return (
+return (
     <>
      
         <div className={`${oswald.className} flex mt-16 p-5 flex-col`}>
@@ -103,11 +114,11 @@ const DefinedSearchbar = (props) => {
                 </div>}
                 <div className='hidden lg:block focus-within:border-sky-500 h-20 p-1 rounded-xl w-64 focus-within:border-1'>
                     <span className='hidden lg:block text-blue-500 font-extrabold'>From Date</span>
-                    <input  value={fromDate} min={getCurrentDate()} onChange={(event)=>{setFromDate(event.target.value)}}   className=' focus:outline-none bg-inherit' type='date'></input>
+                    <input  value={fromDate} min={getCurrentDate()} onChange={FromdateChange}   className=' focus:outline-none bg-inherit' type='date'></input>
                 </div>
                 <div className='hidden lg:block focus-within:border-sky-500 h-20 p-1 rounded-xl w-64 focus-within:border-1'>
                     <span className='hidden lg:block text-blue-500 font-extrabold'>To Date</span>
-                    <input value={todate} min={minToDateStr}  onChange={(event)=>{setToDate(event.target.value)}} className='bg-inherit focus:outline-none' type='date'></input>
+                    <input value={todate} min={minToDateStr}  onChange={TodateChange}  className='bg-inherit focus:outline-none' type='date'></input>
                 </div>
                 <div className=' hidden lg:flex w-56 ml-7  flex-shrink-0 rounded-lg items-center h-full'>
                     <button onClick={handleSearch}  className='bg-blue-500 text-white h-10 rounded-xl w-28  hover:bg-blue-600'>Search</button>
@@ -118,11 +129,11 @@ const DefinedSearchbar = (props) => {
         <div className='flex border-1 mx-5 rounded-xl lg:hidden px-5 flex-col'>
             <div className='flex p-3 flex-col'>
             <span className='text-blue-500 font-extrabold'>From Date </span>
-            <input value={fromDate} min={getCurrentDate()} onChange={(event)=>{setFromDate(event.target.value)}} className='mt-2 bg-inherit focus:outline-none' type='date'></input>
+            <input value={fromDate} min={getCurrentDate()} onChange={FromdateChange}  className='mt-2 bg-inherit focus:outline-none' type='date'></input>
             </div>
             <div className='flex p-3 flex-col'>
             <span className='text-blue-500 font-extrabold'>To Date</span>
-            <input value={todate} min={minToDateStr}  onChange={(event)=>{setToDate(event.target.value)}} className='mt-2 bg-inherit focus:outline-none' type='date'></input>
+            <input value={todate} min={minToDateStr}  onChange={TodateChange}  className='mt-2 bg-inherit focus:outline-none' type='date'></input>
             </div>
         </div>
         <div className='flex  lg:hidden px-5 flex-col'>
