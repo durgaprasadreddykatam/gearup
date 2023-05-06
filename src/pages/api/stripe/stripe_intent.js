@@ -3,7 +3,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2020-08-27',
 });
 const handler = async (req, res) => {
-  const { amount, payment_intent_id } = req.body;
+  const { amount, payment_intent_id ,stripedata } = req.body;
   if (payment_intent_id) {
     try {
       // If a payment_intent_id is passed, retrieve the paymentIntent
@@ -36,9 +36,14 @@ const handler = async (req, res) => {
     const params = {
       amount: amount,
       currency: 'usd',
-      description: 'Payment description',
+      description: 'GearUp Car Rental',
       automatic_payment_methods: {
         enabled: true,
+      },
+      metadata: {
+        email: stripedata.email,
+        DeliveryAddress:stripedata.DeliveryAddress,
+        DeliveryDate:stripedata.DeliveryDate,
       },
     };
     const payment_intent = await stripe.paymentIntents.create(params);

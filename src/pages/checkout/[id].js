@@ -73,7 +73,7 @@ const Checkout = () => {
     }
     const router = useRouter();
     const searchdata=router.query;
-    console.log(searchdata);
+    
     const fromdate = new Date(searchdata.fromDate);
     const todate = new Date(searchdata.todate);
     const formatted_fromdate = fromdate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -145,19 +145,29 @@ useEffect(() => {
   setStripeFinalprice(Math.round((baseprice+salestax+youngrenterfee+unlimitedmilesfee+insuranceprice)*100));
 }, [baseprice,salestax,youngrenterfee,unlimitedmilesfee,insuranceprice]);
 
-
-
-
-
-//stripedata data that need to send to stripe comp as props
-
 const stripedata = authenticated ? {
                                     email:loginuserinfo.email,
                                     name:loginuserinfo.first_name+" "+loginuserinfo.last_name,
                                     DeliveryAddress:searchdata.address,
                                     DeliveryCity:searchdata.city,
                                     DeliveryDate:searchdata.fromDate,
+                                    DeliveryDateObj:searchdata.fromDateObj,
                                     PhoneNumber:loginuserinfo.mobile,
+                                    DeliveryCity:searchdata.city,
+                                    returnAddress:searchdata.isSameaddress ? searchdata.address:searchdata.address1,
+                                    returnCity:searchdata.isSameaddress ? searchdata.city:searchdata.city1,
+                                    returnDate:searchdata.todate,
+                                    returnDateObj:searchdata.toDateObj,
+                                    car_class:checkoutdata.catogary,
+                                    Coverage_selected:insurance,
+                                    userid:userdata.id,
+                                    Drivers:userdata.id,
+                                    isSameaddress:searchdata.isSameaddress,
+                                    no_of_days:days,
+                                    Unlimited_miles_selected:unlimitedmiles,
+                                    amount:stripefinalprice,
+                                    Status:"Booked",
+
                             
                                   }:{
                                     email:driverinfo.email,
@@ -166,9 +176,23 @@ const stripedata = authenticated ? {
                                     DeliveryAddress:searchdata.address,
                                     DeliveryCity:searchdata.city,
                                     DeliveryDate:searchdata.fromDate,
+                                    DeliveryDateObj:searchdata.fromDateObj,
+                                    DeliveryCity:searchdata.city,
+
+                                    returnAddress:searchdata.isSameaddress ? searchdata.address:searchdata.address1,
+                                    returnCity:searchdata.isSameaddress ? searchdata.city:searchdata.city1,
+                                    returnDate:searchdata.todate,
+                                    returnDateObj:searchdata.todateObj,
+                                    car_class:checkoutdata.catogary,
+                                    Coverage_selected:insurance,
+                                    isSameaddress:searchdata.isSameaddress,
+                                    no_of_days:days,
+                                    Unlimited_miles_selected:unlimitedmiles,
+                                    amount:stripefinalprice,
+                                    Status:"Booked",
                                     
-                                  }
-  console.log(stripedata);
+                                  };
+                                  
     
   return (
     <>
@@ -242,7 +266,7 @@ const stripedata = authenticated ? {
                       <div className='mt-3'>Be ready to receive your Car +/- 15 min of the scheduled time</div>
                 </div>
                 {!authenticated && <DriverInfo driverinfo={driverinfo} HandleDriverinfo={HandleDriverinfo}/>}
-                {finalprice !== 0 ? <Indexcomp amount={stripefinalprice} stripedata={stripedata} /> : null}
+                {finalprice !== 0 ? <Indexcomp searchdata={searchdata} amount={stripefinalprice} stripedata={stripedata} /> : null}
 
 
 

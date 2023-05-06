@@ -4,14 +4,17 @@ import {
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
-export default function Form(paymentIntent) {
+export default function Form({paymentIntent,stripedata,searchdata}) {
   const [email, setEmail] = useState('');
   const [locAmount, setLocAmount] = useState(0);
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
+  const router = useRouter();
 
   useEffect(() => {
     if (!stripe) {
@@ -45,6 +48,7 @@ export default function Form(paymentIntent) {
     });
   }, [stripe]);
 
+
   const handleAmount = async (val) => {
     setLocAmount(val);
     fetch('api/stripe_intent', {
@@ -60,39 +64,78 @@ export default function Form(paymentIntent) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    axios.post('/api/UpdatePayements', {
+      Payements:
+      {
+        user_email:stripedata.email,
+        Transaction_Amount:stripedata.amount/100,
+        Currency:"usd",
+        Transaction_Type:"Payement",
+        Transaction_date:new Date(),
+        Payement_Instrument:"Credit Card",
+      },
+      Stripedata:stripedata,
+    }
+    )
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+    
+  
     if (!stripe || !elements) {
       console.log('not loaded');
       // Stripe.js has not yet loaded.
       return;
     }
-
+  
     setIsLoading(true);
-
-    const { error } = await stripe.confirmPayment({
+  
+    const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: 'http://localhost:3000/',
-        receipt_email: email,
+        return_url:'http://localhost:3000/PayementSucess',
+        receipt_email: stripedata.email,
         shipping: {
-          address: { city: 'NY' },
-          name: 'Shipping user',
+          address: { city: stripedata.DeliveryCity },
+          name: stripedata.name,
         },
         payment_method_data: {
           billing_details: {
-            name: 'Billing user',
+            name: stripedata.name,
           },
         },
       },
     });
-
-    if (error.type === 'card_error' || error.type === 'validation_error') {
-      setMessage(error.message);
-    } else {
-      setMessage('An unexpected error occured.');
+  
+    if (error) {
+      if (error.type === 'card_error' || error.type === 'validation_error') {
+        setMessage(error.message);
+      } else {
+        setMessage('An unexpected error occured.');
+      }
+      setIsLoading(false);
+      return;
     }
-
+  
+    if (paymentIntent.status === 'succeeded') {
+      // Perform your database operations here.
+      router.push({
+        pathname: '/PayementSucess',
+        query: searchdata,
+      });
+    } else {
+      setMessage('Your payment was not successful, please try again.');
+    }
+  
     setIsLoading(false);
   };
+  
+  
+  
 
   return (
     <>

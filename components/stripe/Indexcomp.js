@@ -7,6 +7,8 @@ const stripe = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 export default function Indexcomp(props) {
     const [clientSecret, setClientSecret] = useState('');
     const [paymentIntent, setPaymentIntent] = useState('');
+    const stripedata=props.stripedata;
+    
     
     useEffect(() => {
       // Create PaymentIntent as soon as the page loads using our local API
@@ -16,6 +18,8 @@ export default function Indexcomp(props) {
         body: JSON.stringify({
           amount: props.amount,
           payment_intent_id: '',
+          stripedata:stripedata,
+    
         }),
       })
         .then((res) => res.json())
@@ -44,7 +48,7 @@ export default function Indexcomp(props) {
       {clientSecret && (
         
         <Elements options={options} stripe={stripe}>
-          <CheckoutForm paymentIntent={paymentIntent} />
+          <CheckoutForm searchdata={props.searchdata} stripedata={stripedata} paymentIntent={paymentIntent} />
         </Elements>
       )}
     </div>
