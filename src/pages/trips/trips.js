@@ -3,7 +3,7 @@ import { useAuth } from '../../../lib/auth';
 import Footer1 from '../../../components/Footer1';
 import { useRouter } from 'next/router'
 import axios from 'axios';
-import Tripscard from './Tripscard';
+import Tripscard from '../../../components/Tripscard';
 import TripscardLoading from './TripscardLoading';
 
 const Trips = (props) => {

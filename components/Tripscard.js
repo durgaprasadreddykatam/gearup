@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import Popup from '../../../components/Popup';
+import Popup from './Popup';
 
 const Tripscard = (props) => {
     const[show,setShow]=React.useState(false);
