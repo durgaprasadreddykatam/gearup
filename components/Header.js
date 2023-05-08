@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useCallback } from 'react'
-import Menuoptions from './Headerelements/Menuoptions'
+import Popup from './Popup'
 import Image from 'next/image'
 import menu from '../public/icons/Menu.png'
 import { Concert_One ,Inter,Oswald} from 'next/font/google'
@@ -7,7 +7,7 @@ const oswald = Oswald({ subsets: ['latin'],weight:'300'  })
 const concert_one = Concert_One({ subsets: ['latin'], weight:'400' });
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import Signup from '@/pages/signup'
+import Login from './Login'
 import close from '../public/icons/close.png'
 
 
@@ -54,6 +54,16 @@ const Header = () => {
             document.body.style.overflow = 'hidden';
           }
     }
+
+const[popupstate,setPopupstate]=useState(false);
+
+React.useEffect(() => {
+  if (popupstate) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'auto';
+  }
+}, [popupstate]);
     
   return (
     <>
@@ -63,7 +73,7 @@ const Header = () => {
             <div className={`hidden lg:block cursor-pointer text-white ${oswald.className} `}>
                     <span className='mt-10 m-3 hover:underline hover:underline-offset-2'><Link target='_blank' href='/driverpartner'>Become a Driver Partner</Link></span>
                     <span className='m-3 hover:underline hover:underline-offset-2'><Link href='/carsubscription'>Car Subscription</Link></span>
-                    {!isauth && <span className='m-3 hover:underline hover:underline-offset-2'><Link href='/signup'>Sign up | Login</Link></span>}
+                    {!isauth &&  <span onClick={()=>{setPopupstate(true)}} className='m-3 hover:underline hover:underline-offset-2'>Sign up | Login</span>}
                     {isauth && <span className='m-3 hover:underline hover:underline-offset-2'><Link href='/account/Account'>{username}</Link></span>}
                     {isauth && <span className='m-3 hover:underline hover:underline-offset-2'><Link href='/referrals'>Referrals</Link></span>}
                     {isauth && <span className='m-3 hover:underline hover:underline-offset-2'><Link href='/trips/trips'>My Trips</Link></span>}
@@ -83,16 +93,19 @@ const Header = () => {
                     <span onClick={menuClick} className='mt-5 m-3 hover:underline hover:underline-offset-2'><Link href='/driverpartner'   target='_blank' >Become a Driver Partner</Link></span>
                     <span onClick={menuClick} className='m-3 hover:underline hover:underline-offset-2'><Link href='/carsubscription'>Car Subscription</Link></span>
                     <span onClick={menuClick} className='m-3 hover:underline hover:underline-offset-2'><Link href='/Faqs'>FAQ</Link></span>
-                    {!isauth && <span onClick={menuClick}   className='m-3 hover:underline hover:underline-offset-2'><Link href='/signup'>Sign up | Login</Link></span>}
+                    {!isauth && <span onClick={()=>{setPopupstate(true)}}   className='m-3 hover:underline hover:underline-offset-2'>Sign up | Login</span>}
                     {isauth &&  <span onClick={menuClick}   className='m-3 hover:underline hover:underline-offset-2'><Link href='/trips/trips'>My Trips</Link></span>}
                     {isauth && <span  onClick={menuClick}    className='m-3 hover:underline hover:underline-offset-2'><Link href='/referrals'>Referrals</Link></span>}
                     {isauth &&  <span onClick={Signout}   className='m-3 hover:underline hover:underline-offset-2'>Log Out</span>}
                     {isauth &&  <span onClick={menuClick} className='m-3  hover:underline hover:underline-offset-2'><Link href='/account/Account'>Account Settings</Link></span>}
                 </div>
         </div>
-
-                }
-        
+          }
+          <Popup trigger={popupstate} onClose={()=>{setPopupstate(false)}}>
+            <div className='bg-white h-screen lg:h-fit rounded-xl'><Login onClick={()=>{setPopupstate(false)}}/></div>
+            </Popup>
+          
+            {/* onClick={() => { menuClick; ()=>{setPopupstate(true)};}}  */}
     </>
 
     
