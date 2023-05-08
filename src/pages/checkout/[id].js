@@ -15,6 +15,8 @@ import CancellationPolicy from '../../../components/checkoutcomps/CancellationPo
 import DriverInfo from '../../../components/checkoutcomps/DriverInfo';
 import Indexcomp from '../../../components/stripe/Indexcomp';
 import axios from 'axios';
+import Popup from '../../../components/Popup';
+import Login from '../../../components/Login';
 
 const Checkout = () => {
   const[userdata,setUserdata]=React.useState({});
@@ -43,7 +45,7 @@ const Checkout = () => {
 
     const [checkoutdata, setCheckoutdata] = React.useState({});
     const[popupv,setPopup]=React.useState(false);
-    function Popup(){
+    function Popupfunction(){
       setPopup(!popupv);
     }
     
@@ -238,12 +240,12 @@ const stripedata = authenticated ? {
                   </div>
                   <div className='mt-3'>Be ready to receive your Car +/- 15 min of the scheduled time</div>
                 </div>
-                <Deliveryprocess Popup={Popup} userdata={userdata} popupv={popupv}/>
+                <Deliveryprocess Popup={Popupfunction} userdata={userdata} popupv={popupv}/>
                 <Coverage coverage={insurance} userdata={userdata} Insurance={Insurance} item={checkoutdata}/>
                  <Extras item={checkoutdata} userdata={userdata} unlimitedmiles={unlimitedmiles} handleunlimitedmiles={UnlimitedMiles}/>
-                <Drivers agemorethan25={agemorethan25} Agemorethan25={Agemorethan25} Popup={Popup} authenticated={authenticated} userdata={userdata}  />
+                <Drivers agemorethan25={agemorethan25} Agemorethan25={Agemorethan25} Popup={Popupfunction} authenticated={authenticated} userdata={userdata}  />
                 <Deposit_policy/>
-                <Minage Popup={Popup} userdata={userdata}/>
+                <Minage Popup={Popupfunction} userdata={userdata}/>
                 <CancellationPolicy/>
                 
           </div>
@@ -265,8 +267,9 @@ const stripedata = authenticated ? {
                       <span className='text-blue-600'>{formatted_todate}</span>
                       <div className='mt-3'>Be ready to receive your Car +/- 15 min of the scheduled time</div>
                 </div>
-                {!authenticated && <DriverInfo driverinfo={driverinfo} HandleDriverinfo={HandleDriverinfo}/>}
-                {finalprice !== 0 ? <Indexcomp searchdata={searchdata} amount={stripefinalprice} stripedata={stripedata} /> : null}
+                {!authenticated && <button onClick={()=>{setPopup(true)}} className='w-full h-14 rounded-xl border-1 hover:bg-blue-600 hover:text-white'>Sign Up on Login To Continue</button>}
+                {/* {!authenticated && <DriverInfo driverinfo={driverinfo} HandleDriverinfo={HandleDriverinfo}/>} */}
+                {authenticated && finalprice !== 0 ? <Indexcomp searchdata={searchdata} amount={stripefinalprice} stripedata={stripedata} /> : null}
 
 
 
@@ -295,6 +298,9 @@ const stripedata = authenticated ? {
           </div>
           
         </div>
+        <Popup trigger={popupv} onClose={()=>{setPopup(false)}}>
+              <div className='bg-white h-full md:h-fit'><Login onClick={()=>{setPopup(false)}}/></div>
+        </Popup>
         <Footer1/>
        
     </div>
