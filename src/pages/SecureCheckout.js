@@ -1,10 +1,15 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios';
+export const unstable_staticPage = false;
 const SecureCheckout = () => {
     const router = useRouter();
     const Stripedata = router.query;
     React.useEffect(() => {
+        if (Object.keys(router.query).length === 0) {
+          
+          return;
+        }
         axios.post('/api/UpdatePayements', {Stripedata:Stripedata})
         .then(function (response) {
             if(response.data.message==='success'){
@@ -25,7 +30,7 @@ const SecureCheckout = () => {
             console.log(error);
         }
         );
-    }, []);
+    }, [router.query]);
 
   return (
     <div className='flex p-5 justify-center flex-col items-center'>
