@@ -109,9 +109,11 @@ import axios from 'axios'
           username:userdata.firstName + ' ' + userdata.lastName,
           userauthenticated:true
         }));
-        router.push(pathname);
         setIsLoading(false);
         props.onClick();
+        router.reload(window.location.pathname)
+        
+        
   }
   else{
     console.log('error');
@@ -136,7 +138,7 @@ const[passworderror,setPassworderror]=useState("");
           userauthenticated:true
         }));
         setIsLoading(false);
-        router.push(pathname);
+        router.reload(window.location.pathname)
         props.onClick();
   }
   else if(response.data.message==='failure'){

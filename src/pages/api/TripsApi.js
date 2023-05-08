@@ -31,7 +31,32 @@ const upcomingtrips = await db.collection('Trips').aggregate([
         }
     }
     ]).toArray();
-    return res.json({Pasttrips:pasttrips,Upcomingtrips:upcomingtrips});
+    if (pasttrips.length > 0 && upcomingtrips.length > 0) {
+        return res.json({
+          pastripsmessage: 'Past Trips Found',
+          upcomingtripsmessage: 'Upcoming Trips Found',
+          Pasttrips: pasttrips,
+          Upcomingtrips: upcomingtrips
+        });
+      } else if (pasttrips.length > 0 && upcomingtrips.length === 0) {
+        return res.json({
+            upcomingtripsmessage: 'No Upcoming Trips Found',
+          pastripsmessage: 'Past Trips Found',
+          Pasttrips: pasttrips
+        });
+      } else if (pasttrips.length === 0 && upcomingtrips.length > 0) {
+        return res.json({
+            pastripsmessage: 'No Past Trips Found',
+          upcomingtripsmessage: 'Upcoming Trips Found',
+          Upcomingtrips: upcomingtrips
+        });
+      } else {
+        return res.json({
+          pastripsmessage: 'No Past Trips Found',
+          upcomingtripsmessage: 'No Upcoming Trips Found'
+        });
+      }
+      
 }
 
 

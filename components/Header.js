@@ -28,7 +28,7 @@ const Header = () => {
         localStorage.removeItem('user');
         setIsauth(false);
         setUsername('');
-        router.push('/');
+        router.reload(window.location.pathname)
     }
     const handleWindowResize = useCallback(() => {
         if (window.innerWidth >= 1024) {
