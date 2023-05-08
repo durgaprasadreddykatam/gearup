@@ -4,6 +4,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 });
 const handler = async (req, res) => {
   const { amount, payment_intent_id ,stripedata } = req.body;
+  const metadata = {
+    stripedata: JSON.stringify(stripedata)
+  };
   if (payment_intent_id) {
     try {
       // If a payment_intent_id is passed, retrieve the paymentIntent
@@ -40,11 +43,7 @@ const handler = async (req, res) => {
       automatic_payment_methods: {
         enabled: true,
       },
-      metadata: {
-        email: stripedata.email,
-        DeliveryAddress:stripedata.DeliveryAddress,
-        DeliveryDate:stripedata.DeliveryDate,
-      },
+      metadata:{},
     };
     const payment_intent = await stripe.paymentIntents.create(params);
     //Return the payment_intent object

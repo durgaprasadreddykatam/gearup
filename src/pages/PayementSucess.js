@@ -14,10 +14,10 @@ const PayementSucess = () => {
             </div>
                 <div className='text-sm mt-3 text-gray-500 lg:ml-16'>Confirmation Will be Sent to Email</div>
                 <div className='text-sm mt-3 text-gray-500 lg:ml-16'>
-                    <div>Delivery date:{searchdata.fromDate}<span></span></div>
-                    <div>Delivery Location:{searchdata.address}<span></span></div>
-                    <div>Return date:{searchdata.todate}<span></span></div>
-                    <div>Return Location:{searchdata.isSameaddress ? `searchdata.address`:`searchdata.address1`}<span></span></div>
+                    <div>Delivery date:{searchdata.DeliveryDate}<span></span></div>
+                    <div>Delivery Location:{searchdata.DeliveryAddress}<span></span></div>
+                    <div>Return date:{searchdata.returnDate}<span></span></div>
+                    <div>Return Location:{searchdata.returnAddress}<span></span></div>
                 </div>
                 
             

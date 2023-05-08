@@ -5,7 +5,7 @@ import {
   useElements,
 } from '@stripe/react-stripe-js';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+
 
 export default function Form({paymentIntent,stripedata,searchdata}) {
   const [email, setEmail] = useState('');
@@ -15,6 +15,8 @@ export default function Form({paymentIntent,stripedata,searchdata}) {
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
+  const params = new URLSearchParams(stripedata);
+  const returnUrl = `http://localhost:3000/SecureCheckout?${params.toString()}`;
 
   useEffect(() => {
     if (!stripe) {
@@ -63,41 +65,16 @@ export default function Form({paymentIntent,stripedata,searchdata}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    axios.post('/api/UpdatePayements', {
-      Payements:
-      {
-        user_email:stripedata.email,
-        Transaction_Amount:stripedata.amount/100,
-        Currency:"usd",
-        Transaction_Type:"Payement",
-        Transaction_date:new Date(),
-        Payement_Instrument:"Credit Card",
-      },
-      Stripedata:stripedata,
-    }
-    )
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-
-    
-  
-    if (!stripe || !elements) {
+   if (!stripe || !elements) {
       console.log('not loaded');
-      // Stripe.js has not yet loaded.
+      
       return;
     }
-  
     setIsLoading(true);
-  
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url:'http://localhost:3000/PayementSucess',
+        return_url:returnUrl,
         receipt_email: stripedata.email,
         shipping: {
           address: { city: stripedata.DeliveryCity },
@@ -120,14 +97,8 @@ export default function Form({paymentIntent,stripedata,searchdata}) {
       setIsLoading(false);
       return;
     }
-  
-    if (paymentIntent.status === 'succeeded') {
-      // Perform your database operations here.
-      router.push({
-        pathname: '/PayementSucess',
-        query: searchdata,
-      });
-    } else {
+    
+     else {
       setMessage('Your payment was not successful, please try again.');
     }
   

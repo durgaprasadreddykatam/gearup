@@ -3,16 +3,16 @@ const { ObjectId } = require('mongodb');
 
 export default async function handler(req, res) {
   const db = await connectToDatabase();
-  const { Payements,Stripedata } = req.body;
+  const { Stripedata } = req.body;
 
   const UpdatePayemenys = await db.collection('Payements').insertOne({
-    user_email: Payements.user_email,
-    Transaction_Amount: Payements.Transaction_Amount,
-    Currency: Payements.Currency,
-    Transaction_Type: Payements.Transaction_Type,
-    Transaction_date: Payements.Transaction_date,
-    Payement_Instrument: Payements.Payement_Instrument,
-    Payement_Status: "Started",
+    user_email: Stripedata.user_email,
+    Transaction_Amount: Stripedata.amount,
+    Currency: 'USD',
+    Transaction_Type: 'Payement',
+    Transaction_date: new Date(),
+    Payement_Instrument: "Card",
+    Payement_Status: "Completed",
   });
 
   const Payement_refid = UpdatePayemenys.insertedId;
@@ -28,15 +28,18 @@ export default async function handler(req, res) {
     Return_date: Stripedata.returnDateObj,
     Return_date_Normal: Stripedata.returnDate,
     user_id:new ObjectId(Stripedata.userid),
-    amount_paid: Payements.Transaction_Amount,
+    amount_paid: Stripedata.amount,
     car_class: Stripedata.car_class,
     Coverage_selected: Stripedata.Coverage_selected,
     Drivers: Stripedata.Drivers,
     isSameaddress: Stripedata.isSameaddress,
     no_of_days: Stripedata.no_of_days,
     Unlimited_miles_selected: Stripedata.Unlimited_miles_selected,
-    Status: "Started",
+    Status: "Completed",
   });
-
-  return res.json({ UpdatePayemenys: UpdatePayemenys, UpdateTrips: UpdateTrips});
+  if(UpdateTrips.insertedId){
+    return res.json({ message: 'success' });
+  }
+  else
+  return res.json({ message: 'failure' });
 }

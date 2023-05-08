@@ -166,7 +166,7 @@ const stripedata = authenticated ? {
                                     no_of_days:days,
                                     Unlimited_miles_selected:unlimitedmiles,
                                     amount:stripefinalprice,
-                                    Status:"Booked",
+                                    
 
                             
                                   }:{
@@ -189,7 +189,7 @@ const stripedata = authenticated ? {
                                     no_of_days:days,
                                     Unlimited_miles_selected:unlimitedmiles,
                                     amount:stripefinalprice,
-                                    Status:"Booked",
+                              
                                     
                                   };
                                   
