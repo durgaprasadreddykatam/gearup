@@ -36,7 +36,6 @@ React.useEffect(() => {
   axios.post('/api/TripsApi', {userid: user.id})
   
       .then((res) => {
-        console.log(res.data);
           if(res.data.pastripsmessage==="Past Trips Found" && res.data.upcomingtripsmessage==="Upcoming Trips Found"){
               setPastripsfound(true);
               setUpcomingripsfound(true);
@@ -63,9 +62,6 @@ React.useEffect(() => {
             }});
 
 }, []);
-console.log(upcomingripsfound);
-console.log(pastripsfound);
-console.log(upcomingripsadata);
 
 
 

@@ -6,6 +6,7 @@ const concert_one = Concert_One({ subsets: ['latin'], weight:'400' });
 import React, { useState,useEffect } from 'react';
 import { debounce } from 'lodash';
 import {motion as m} from 'framer-motion';
+import Link from 'next/link';
 
 
 const Footer1 = () => {
@@ -97,10 +98,10 @@ const Footer1 = () => {
                 </div>
                 {show.resources && <div className='flex flex-col'>
                             <div className='mb-3 cursor-pointer text-gray-600 font-bold hover:underline underline-offset-4'>Accessibility</div>
-                            <div className='mb-3 cursor-pointer text-gray-600 font-bold hover:underline underline-offset-4'>Become a Driver Partner</div>
-                            <div className='mb-3 cursor-pointer text-gray-600 font-bold hover:underline underline-offset-4'>Car Subscription</div>
+                            <div className='mb-3 cursor-pointer text-gray-600 font-bold hover:underline underline-offset-4'><Link target='_blank' href='/driverpartner'>Become a Driver Partner</Link></div>
+                            <div className='mb-3 cursor-pointer text-gray-600 font-bold hover:underline underline-offset-4'><Link href='/carsubscription'>Car Subscription</Link></div>
                             <div className='mb-3 cursor-pointer text-gray-600 font-bold hover:underline underline-offset-4'>Tesla subscription</div>
-                            <div className='mb-3 cursor-pointer text-gray-600 font-bold hover:underline underline-offset-4'>Referrals</div>
+                            <div className='mb-3 cursor-pointer text-gray-600 font-bold hover:underline underline-offset-4'><Link href='/referrals'>Referrals</Link></div>
                             <div className='mb-3 cursor-pointer text-gray-600 font-bold hover:underline underline-offset-4'>Partner With Us</div>
                     
                         </div>}
