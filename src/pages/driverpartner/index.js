@@ -11,7 +11,6 @@ import earnmore from '../../../public/images/cars/earnmore.png'
 import mobile from '../../../public/images/cars/mobile.png'
 import plan from '../../../public/images/cars/plan.png'
 import Link from 'next/link'
-//http://localhost:3000/partnerSignup
 const Driverpartner = () => {
   return (
     <>

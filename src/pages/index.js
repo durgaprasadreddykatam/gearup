@@ -32,7 +32,7 @@ export default function Home() {
           </div>
           </div>
           <div className='hidden lg:block w-200'>
-          <Image src={main} alt='' className=' flex-shrink-0 h-72 w-100  mr-10'/>
+          <Image height={200} width={200} src={main} alt='' className=' flex-shrink-0 h-72 w-100  mr-10'/>
           </div>
         
           

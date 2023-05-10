@@ -210,9 +210,11 @@ function handleCredentialResponse(response) {
 
   return (
     <>
-    <div className='w-full  flex  items-center justify-center '>
+    <div className='w-full relative  flex  items-center justify-center '>
+
       {checkuser==="null"&&
           <div className={`w-full relative rounded-lg flex p-5 sm:w-120  items-center flex-col ${oswald.className}` }>
+            <span className='absolute top-5 text-green-700 right-36'>Demo-Email:<span className='text-blue-500 font-extrabold'>demouser@mail.com</span></span>
               <Image onClick={props.onClick} className='absolute h-6 w-6 left-6 cursor-pointer' alt='' width={100} height={100} src={`/icons/close.png`}/>
               <div className='text-3xl mt-10 font-bold'>Sign up or Sign in</div>
               <span className='mt-5 text-sm'>Type your email address below and we'll check if you already have an account. Otherwise, we'll quickly create one for you.</span>
@@ -248,7 +250,7 @@ function handleCredentialResponse(response) {
 
     { checkuser ==="emailnotfound" &&   
         <div className={`w-full flex p-5 rounded-lg sm:w-120 relative items-center flex-col ${oswald.className}`}>
-            <Image onClick={props.onClick} src={`/icons/close.png`} height={100} alt='' width={100} alt='' className='h-5 w-5 cursor-pointer absolute top-4 left-2'/>
+            <Image onClick={props.onClick} src={`/icons/close.png`} height={100} alt='' width={100}  className='h-5 w-5 cursor-pointer absolute top-4 left-2'/>
             <span className='text-xl'>Continue with Email</span>
             <span className='font-extralight text-lg'>It looks like you're new around here! Please sign up below!</span>
             <form className=' w-full flex flex-col'>
@@ -284,6 +286,7 @@ function handleCredentialResponse(response) {
     {/* if email is found render this */}
     { checkuser ==="emailfound" &&   
         <div className={`w-full flex p-5 relative rounded-lg sm:w-120 items-center flex-col ${oswald.className}`}>
+          <span className='absolute top-1 text-green-700 right-36'>Demo-Password:<span className='text-blue-500 font-extrabold'>Pass@demo</span></span>
             <Image onClick={props.onClick} src={`/icons/close.png`} height={100} width={100} alt='' className='h-5 w-5 cursor-pointer absolute top-4 left-2'/>
             <span className='text-xl'>Login with Email</span>
             <span className='font-extralight mt-5 text-lg'>Welcome Back <span className='text-2xl font-bold'>{username}</span> </span>
