@@ -4,6 +4,7 @@ import React, { useState,useEffect } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router';
 import axios from 'axios'
+import jwtDecode from "jwt-decode";
 
   const nameRegex = /^[a-zA-Z]+$/; // regex to match only alphabets
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // regex to match proper email format
@@ -11,7 +12,6 @@ import axios from 'axios'
 
   function Login (props)  {
   const router = useRouter();
-  const  pathname = router.pathname;
   
   const [checkuser, setCheckuser] = useState("null");//emailnotfound, null, emailfound
   const[nextbuttonstyle,setNextbuttonstyle]=useState(false)
@@ -152,6 +152,58 @@ const[passworderror,setPassworderror]=useState("");
 })
 }
 
+// Sign in With Google
+
+useEffect(() => {
+  google.accounts.id.initialize({
+      client_id:process.env.NEXT_PUBLIC_GOOGLEOATH_CLIENT_ID,
+      callback:handleCredentialResponse 
+  })
+  google.accounts.id.renderButton(
+      document.getElementById("signindiv"),
+      { theme: "outline", size: "large", text:"sign", width: "400px",logo_alignment:"center"}
+  );
+}, []);
+function handleCredentialResponse(response) {
+  const userObject = jwtDecode(response.credential);
+  //checks if user Signs Up for First time or not
+  axios.post('/api/logintest', {email:userObject.email})
+  .then(function (response) {
+    if(response.data.message==='emailfound'){
+      //user is already Signed Up
+      setUserid(response.data.id)
+      axios.post('/api/authuser', {id:response.data.id,password:"googleauthenticated"})
+      .then(function (response1) {
+        if(response1.data.message==='success'){
+          localStorage.setItem('user', JSON.stringify({
+            id: response1.data.id,
+            username:response1.data.firstName + ' ' + response1.data.lastName,
+            userauthenticated:true
+          }));
+          router.reload(window.location.pathname)
+        }})
+      
+    }
+     //if user is signing up for first time then create account
+
+    else if(response.data.message==='emailnotfound'){
+      axios.post('/api/createaccount', {email:userObject.email,userdata:{firstName:userObject.given_name,lastName:userObject.family_name,phoneNumber:'',password:userObject.sub}})
+      .then(function (response) {
+        if(response.data.message==='success'){
+          localStorage.setItem('user', JSON.stringify({
+            id: response.data.id,
+            username:userObject.given_name + ' ' +userObject.family_name,
+            userauthenticated:true
+          }));
+          router.reload(window.location.pathname)
+        }});
+  
+    }
+  
+  })
+  // 
+}
+
   
   
   
@@ -174,10 +226,22 @@ const[passworderror,setPassworderror]=useState("");
                                                 {isLoading && <div className='h-5 mr-4 rounded-full animate-spin border-2 border-gray-400 w-5 border-t-2 border-t-white'></div>}
                                                 {isLoading ? `Loading`:`Next`}
                                         </button>}
+
+              {/* button for Google Signup */}
+              
+              <div className='flex mt-10 justify-center items-center'>
+                    <div id='signindiv'></div>
+              </div>
+              
+              {/* button for Github Signup */}
+              <div className='flex justify-center'>or</div>
+              <button className={`mt-5 h-12  flex items-center justify-center text-white cursor-not-allowed bg-sky-300 font-bold rounded-lg`}>Signup using GitHub</button>
               </form>
 
               <span className='mt-10 text-xs font-light'>By continuing, you agree to GearUp's Terms of Service and Privacy Policy.</span>
+             
           </div>
+          
       }
 
     {/* if New User and if email is not found render this  */}

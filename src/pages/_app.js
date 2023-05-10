@@ -14,6 +14,8 @@ export default function App({ Component, pageProps }) {
   return(
           <Layout>
             <script src={url}></script>
+            {/* <script src="https://apis.google.com/js/api.js"></script>
+            <script src="https://accounts.google.com/gsi/client" async defer></script> */}
             <Component  {...pageProps}  />
           </Layout>
         )

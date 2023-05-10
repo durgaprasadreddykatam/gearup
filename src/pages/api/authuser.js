@@ -5,7 +5,11 @@ import { ObjectId } from 'mongodb';
 export default async function handler(req, res) {
   const db = await connectToDatabase();
   const { id, password } = req.body;
-  const passwordcheck = await db.collection('users').findOne({ _id: new ObjectId(id) });
+  if(password === "googleauthenticated"){
+    const passwordcheck = await db.collection('users').findOne({ _id: new ObjectId(id) });
+    return res.json({ message: 'success', id: passwordcheck._id, firstName: passwordcheck.First_Name, lastName: passwordcheck.Last_Name });
+  }else{
+    const passwordcheck = await db.collection('users').findOne({ _id: new ObjectId(id) });
 
   
   if (!passwordcheck) {
@@ -13,9 +17,11 @@ export default async function handler(req, res) {
   }
 
   if (passwordcheck.password === password) {
-    return res.json({ message: 'success', id: passwordcheck._id, firstName: passwordcheck.firstName, lastName: passwordcheck.lastName });
+    return res.json({ message: 'success', id: passwordcheck._id, firstName: passwordcheck.First_Name, lastName: passwordcheck.Last_Name });
   } else {
     return res.json({ message: 'failure' });
   }
+  }
+  
   
 }
