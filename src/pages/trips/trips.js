@@ -83,7 +83,7 @@ return (
     {!isAuth && 
       <div>
         <div className='h-100 flex flex-col items-center justify-center w-full p-5 lg:p-20 border-y-2 border-y-sky-600'>
-          <div className='lg:text-2xl'>Have Fun Booking a car</div>
+          <div className='lg:text-2xl '>Have Fun Booking a car</div>
           <div className='lg:text-2xl mt-10'>Sign up or log in to plan your next trip with Us.</div>
           <button onClick={()=>{setPopupstate(true)}} className='h-12 w-60 text-white bg-blue-500 rounded-xl mt-10'>Sign Up</button>
         </div>
@@ -103,12 +103,12 @@ return (
       {isLoading && <TripscardLoading/>}
       {!upcomingripsfound && !pastripsfound&& <div className='flex flex-col lg:flex-row'>
        
-        <Image src={`/Images/nobookings.webp`} width={600} height={500} className=''/>
+        <Image src={`/Images/nobookings.jpg`} width={600} height={500} className=''/>
         <div className='flex flex-col w-full items-center lg:ml-10'>
         <div className=' text-4xl' >No trips (yet!)</div>
         <div className='text-2xl'>You haven't booked a Car yet.</div>
         <div> How about doing so for your next adventure?</div>
-        <button onClick={()=>{router.push('/')}} className='h-12 w-80 bg-blue-600 text-white rounded-2xl mt-5 lg:mt-20 hover:bg-blue-500'>Book Your Car Now</button>
+        <button onClick={()=>{router.push('/')}} className='h-12 w-80 bg-blue-600 mb-10 text-white rounded-2xl mt-5 lg:mt-20 hover:bg-blue-500'>Book Your Car Now</button>
         </div>
         
         
