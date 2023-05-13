@@ -65,6 +65,7 @@ const CarPickerPage = () => {
 
   });
   const[editdates,setEditdates] = React.useState(false);
+  console.log(searchdata);
 
 
 
