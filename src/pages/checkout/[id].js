@@ -275,7 +275,7 @@ const stripedata = authenticated ? {
         <Popup trigger={payementpopup} onClose={()=>{setPayementpopup(false)}}>
               <div className='bg-white p-4 h-full relative md:h-fit'>
                 <Image onClick={()=>{setPayementpopup(false)}} className='h-8 w-8 mt-5 cursor-pointer top-5'  src={`/icons/close.png`} width={100} height={100} alt=''/>
-                {/* {authenticated && finalprice !== 0 ? <Indexcomp searchdata={searchdata} amount={stripefinalprice} stripedata={stripedata} /> : null} */}
+                {authenticated && finalprice !== 0 ? <Indexcomp searchdata={searchdata} amount={stripefinalprice} stripedata={stripedata} /> : null}
               </div>
         </Popup>
         <Popup trigger={totalpricepopup} onClose={()=>{setTotalpricepopup(false)}}>
