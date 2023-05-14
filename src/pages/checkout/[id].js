@@ -17,8 +17,11 @@ import Indexcomp from '../../../components/stripe/Indexcomp';
 import axios from 'axios';
 import Popup from '../../../components/Popup';
 import Login from '../../../components/Login';
+import { set } from 'lodash';
 
 const Checkout = () => {
+  const router = useRouter();
+  const searchdata=router.query;
   const[userdata,setUserdata]=React.useState({});
   const[authenticated,setAuthenticated]=React.useState(false);
   // initial load and getting data from local storage
@@ -49,9 +52,25 @@ const Checkout = () => {
       setPopup(!popupv);
     }
     
-    React.useEffect(() => {
-        setCheckoutdata(data);
-    }, []);
+    useEffect(() => {
+      if(searchdata!==undefined){
+        axios.post('/api/Checkoutcarsdata',{searchdata:searchdata})
+      .then((res) => {
+        if(res.data.message==="success"){
+          setCheckoutdata(res.data.data);
+        }
+        else{
+          
+        }
+      }
+      )
+      .catch(function (error) {
+        console.log(error);
+      }
+      );
+      }
+    }, [searchdata]);
+    
     const [unlimitedmiles, setUnlimitedmiles] = React.useState(false);
     function UnlimitedMiles(){
       setUnlimitedmiles(!unlimitedmiles);
@@ -63,19 +82,7 @@ const Checkout = () => {
     const[insurance,setInsurance]=React.useState('');
     function Insurance(value){
        setInsurance(value);
-       if (insurance === "Essential_Coverage") {
-        setInsuranceprice(Math.round((checkoutdata.Essential_Coverage * days)*100)/100);
-      } else if (insurance === "Standard_Coverage") {
-        setInsuranceprice(Math.round((checkoutdata.Standard_Coverage * days)*100)/100);
-      } else if (insurance === "I_have_my_own") {
-        setInsuranceprice(Math.round((checkoutdata.I_have_my_own * days)*100)/100);
-      } else if (insurance === "") {
-        setInsuranceprice(0);
-      }
     }
-    const router = useRouter();
-    const searchdata=router.query;
-    
     const fromdate = new Date(searchdata.fromDate);
     const todate = new Date(searchdata.todate);
     const formatted_fromdate = fromdate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -83,32 +90,21 @@ const Checkout = () => {
     const days= searchdata.no_of_days;
     const baseprice=Math.round(checkoutdata.price*days*100)/100;
     const salestax=Math.round(baseprice*0.07* 100) / 100;
-
-    //Young Renter Fee
+    
     const [youngrenterfee,setYoungrenterfee]=React.useState(0);
+    const [unlimitedmilesfee,setUnlimitedmilesfee]=React.useState(0);
+    const[insuranceprice,setInsuranceprice]=React.useState(0);
     useEffect(() => {
       if(agemorethan25){
         setYoungrenterfee(Math.round(checkoutdata.young_renter_fee*days*100)/100);
-      }else{
+      }else if(!agemorethan25){
         setYoungrenterfee(0);
       }
-    }, [agemorethan25]);
-   
-    //Unlimited Miles Fee
-    const [unlimitedmilesfee,setUnlimitedmilesfee]=React.useState(0);
-
-    useEffect(() => {
       if(unlimitedmiles){
         setUnlimitedmilesfee(Math.round(checkoutdata.unlimited_miles_per_day*days*100)/100);
-      }else{
+      }else if(!unlimitedmiles){
         setUnlimitedmilesfee(0);
       }
-    }, [unlimitedmiles]);
-
-    //Insurance Price
-    const[insuranceprice,setInsuranceprice]=React.useState(0);
-
-    useEffect(() => {
       if (insurance === "Essential_Coverage") {
         setInsuranceprice(Math.round((checkoutdata.Essential_Coverage * days)*100)/100);
       } else if (insurance === "Standard_Coverage") {
@@ -118,27 +114,19 @@ const Checkout = () => {
       } else if (insurance === "") {
         setInsuranceprice(0);
       }
-    }, [insurance]);
+
+    }, [agemorethan25,unlimitedmiles,insurance]);
+    const [payementpopup,setPayementpopup]=React.useState(false);
+    const [totalpricepopup,setTotalpricepopup]=React.useState(false);
     
     React.useEffect(() => {
-      if (popupv) {
+      if (popupv || payementpopup ||totalpricepopup) {
         document.body.style.overflow = 'hidden';
       } else {
         document.body.style.overflow = 'auto';
       }
-    }, [popupv]);
-    
+    }, [popupv,payementpopup,totalpricepopup]);
 
-    const[driverinfo,setDriverinfo]=React.useState({firstname:'',lastname:'',email:'',confirmemail:'',phonenumber:''});
-    function HandleDriverinfo(event){
-      const{name,value}=event.target;
-      setDriverinfo(prevValue=>{
-        return{
-          ...prevValue,
-          [name]:value
-        }
-      })
-    }
 const [finalprice, setFinalprice] = React.useState(Math.round((baseprice+salestax+youngrenterfee+unlimitedmilesfee+insuranceprice)*100)/100);
 const [stripefinalprice, setStripeFinalprice] = React.useState(Math.round((baseprice+salestax+youngrenterfee+unlimitedmilesfee+insuranceprice)*100));
 
@@ -167,35 +155,14 @@ const stripedata = authenticated ? {
                                     isSameaddress:searchdata.isSameaddress,
                                     no_of_days:days,
                                     Unlimited_miles_selected:unlimitedmiles,
-                                    amount:stripefinalprice,
-                                    
-
-                            
-                                  }:{
-                                    email:driverinfo.email,
-                                    PhoneNumber:driverinfo.phonenumber,
-                                    name:driverinfo.firstname+" "+driverinfo.lastname,
-                                    DeliveryAddress:searchdata.address,
-                                    DeliveryCity:searchdata.city,
-                                    DeliveryDate:searchdata.fromDate,
-                                    DeliveryDateObj:searchdata.fromDateObj,
-                                    DeliveryCity:searchdata.city,
-
-                                    returnAddress:searchdata.isSameaddress ? searchdata.address:searchdata.address1,
-                                    returnCity:searchdata.isSameaddress ? searchdata.city:searchdata.city1,
-                                    returnDate:searchdata.todate,
-                                    returnDateObj:searchdata.todateObj,
-                                    car_class:checkoutdata.catogary,
-                                    Coverage_selected:insurance,
-                                    isSameaddress:searchdata.isSameaddress,
-                                    no_of_days:days,
-                                    Unlimited_miles_selected:unlimitedmiles,
-                                    amount:stripefinalprice,
-                              
-                                    
-                                  };
+                                    amount:finalprice,
+                                    stripeamount:stripefinalprice,
+                                  }:{};
                                   
-    
+    function Changecar(){
+      router.push({pathname:'/CarPickerPage',query:searchdata});
+    }
+   
   return (
     <>
     <script src="https://js.stripe.com/v3/"></script>
@@ -205,7 +172,7 @@ const stripedata = authenticated ? {
            <div className='flex lg:hidden flex-col'>
                 <div className='text-xl'>{checkoutdata.catogary}</div>
                 <div className='text-sm text-slate-500'>{checkoutdata.capacity} Seats.{checkoutdata.luggage} suitcases</div>
-                <div className='mt-5 text-blue-500 font-extrabold cursor-pointer hover:underline'>Change Car</div>
+                <div onClick={Changecar} className='mt-5 text-blue-500 font-extrabold cursor-pointer hover:underline'>Change Car</div>
             </div>
             <div className='h-24 w-36  flex lg:w-full lg:px-10  justify-between lg:h-100 rounded-xl'>
                 <Image src={`/images/cars/subscriptioncars/${checkoutdata.catogary}1.jpeg`} className='h-24 w-36 lg:w-2/3 lg:h-100 rounded-xl' width={1000} height={1000} alt=''/>
@@ -213,7 +180,7 @@ const stripedata = authenticated ? {
                 <div className='text-5xl'>{checkoutdata.catogary}</div>
                 <div className='text-sm text-slate-500'>{checkoutdata.capacity} Seats.{checkoutdata.luggage} suitcases</div>
                 
-                <div className='text-white h-12 w-44 rounded-xl bg-blue-500 flex items-center justify-center mt-20 cursor-pointer'>Change Car</div>
+                <div onClick={Changecar} className='text-white h-12 w-44 rounded-xl bg-blue-500 flex items-center justify-center mt-20 cursor-pointer'>Change Car</div>
             </div>
 
             </div>
@@ -267,9 +234,9 @@ const stripedata = authenticated ? {
                       <span className='text-blue-600'>{formatted_todate}</span>
                       <div className='mt-3'>Be ready to receive your Car +/- 15 min of the scheduled time</div>
                 </div>
-                {!authenticated && <button onClick={()=>{setPopup(true)}} className='w-full h-14 rounded-xl border-1 hover:bg-blue-600 hover:text-white'>Sign Up on Login To Continue</button>}
+                {!authenticated && <button onClick={()=>{setPopup(true)}} className='w-full h-14 rounded-xl border-1 hover:bg-blue-600 hover:text-white'>Sign Up or Login To Continue</button>}
                 {/* {!authenticated && <DriverInfo driverinfo={driverinfo} HandleDriverinfo={HandleDriverinfo}/>} */}
-                {authenticated && finalprice !== 0 ? <Indexcomp searchdata={searchdata} amount={stripefinalprice} stripedata={stripedata} /> : null}
+                {authenticated && finalprice !== 0 ? <Indexcomp  stripedata={stripedata} /> : null}
 
 
 
@@ -282,24 +249,65 @@ const stripedata = authenticated ? {
                     <div className='text-lg font-extrabold'>Total Price</div>
                     <div>${finalprice}</div>
                   </div>
-                  <div className='mt-5 text-blue-600 font-extrabold cursor-pointer'>See Price Details</div>
+                  <div onClick={()=>{setTotalpricepopup(true)}} className='mt-5 text-blue-600 font-extrabold cursor-pointer'>See Price Details</div>
                 </div>
           </div>
         </div>
         
         
         <div className={`${popupv ? `static `:`fixed`} flex lg:hidden justify-between items-center bottom-0 h-32 z-40 w-full p-10 bg-white`}>
-          <div>
-            <div className='flex items-center'>
-              <div className='text-2xl'>Total Price</div>
-              <Image src={`/icons/infopopup.png`} height={90} width={90} alt='' className='h-5 w-5 ml-3 cursor-pointer'/>
+          <div className='flex items-center justify-between'>
+            <div className='flex flex-col w-60'>
+              <div className='text-2xl flex items-center'>Total Price
+                <Image onClick={()=>{setTotalpricepopup(true)}} src={`/icons/infopopup.png`} height={90} width={90} alt='' className='h-5 w-5 ml-3 cursor-pointer'/>
+              </div>
+              <div>${finalprice}</div>
             </div>
-            <div>${finalprice}</div>
+            
+            {!authenticated && <button onClick={()=>{setPopup(true)}} className='w-44 h-14 rounded-xl border-1 hover:bg-blue-600 hover:text-white'>Sign Up or Login To Continue</button>}
+            {authenticated && <button onClick={()=>{setPayementpopup(true)}} className='w-44 h-14 rounded-xl border-1 bg-blue-600 text-white'>Book and Pay</button>}
           </div>
           
         </div>
         <Popup trigger={popupv} onClose={()=>{setPopup(false)}}>
               <div className='bg-white h-full md:h-fit'><Login onClick={()=>{setPopup(false)}}/></div>
+        </Popup>
+        <Popup trigger={payementpopup} onClose={()=>{setPayementpopup(false)}}>
+              <div className='bg-white p-4 h-full relative md:h-fit'>
+                <Image onClick={()=>{setPayementpopup(false)}} className='h-8 w-8 mt-5 cursor-pointer top-5'  src={`/icons/close.png`} width={100} height={100} alt=''/>
+                {/* {authenticated && finalprice !== 0 ? <Indexcomp searchdata={searchdata} amount={stripefinalprice} stripedata={stripedata} /> : null} */}
+              </div>
+        </Popup>
+        <Popup trigger={totalpricepopup} onClose={()=>{setTotalpricepopup(false)}}>
+              <div className='flex flex-col items-center relative h-120 w-screen  lg:w-120 lg:h-80 rounded-xl bg-white '>
+                <Image onClick={()=>{setTotalpricepopup(false)}} className='h-7 absolute top-0 left-3 w-7 mt-5 cursor-pointer'  src={`/icons/close.png`} width={100} height={100} alt=''/>
+                <div className='text-2xl mt-5'>Price Details</div>
+                <div className=' mt-5 flex w-screen px-10 justify-between lg:w-80'>
+                  <div>Your Car</div>
+                  <div>${checkoutdata.price} x {days} Days</div>
+                </div>
+                
+                {insuranceprice >0 && <div className='w-screen px-10  flex justify-between lg:w-80'>
+                  <div>{insurance==='Essential_Coverage' ? `Essential Coverage`:`Standard Coverage`}</div>
+                  <div>${insurance==='Essential_Coverage' ? `${checkoutdata.Essential_Coverage}`:`${checkoutdata.Standard_Coverage}`} x {days} Days</div>
+                  </div>}
+                {unlimitedmilesfee>0 && <div className='w-screen px-10  flex justify-between lg:w-80'>
+                  <div>Unlimited Miles</div>
+                  <div>${checkoutdata.unlimited_miles_per_day} x {days} Days</div>
+                </div>}
+                {youngrenterfee>0 && <div className='w-screen px-10  flex justify-between lg:w-80'>
+                  <div>Young Renter Fee</div>
+                  <div>${checkoutdata.young_renter_fee} x {days} Days</div>
+                </div>}
+                <div className='w-screen px-10  pb-10 border-b-1 flex justify-between lg:w-80'>
+                  <div>Sales Tax</div>
+                  <div>${salestax}</div>
+                </div>
+                <div className='w-screen px-10 mt-3   flex justify-between lg:w-80'>
+                  <div className='text-xl font-extrabold'>Total Price</div>
+                  <div className='text-xl font-extrabold'>${finalprice}</div>
+                </div>
+              </div>
         </Popup>
         <Footer1/>
        

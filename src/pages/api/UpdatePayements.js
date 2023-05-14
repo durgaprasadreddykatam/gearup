@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   const { Stripedata } = req.body;
 
   const UpdatePayemenys = await db.collection('Payements').insertOne({
-    user_email: Stripedata.user_email,
+    user_email: Stripedata.email,
     Transaction_Amount: Stripedata.amount,
     Currency: 'USD',
     Transaction_Type: 'Payement',

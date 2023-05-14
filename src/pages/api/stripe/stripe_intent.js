@@ -37,7 +37,7 @@ const handler = async (req, res) => {
   try {
     // Create PaymentIntent
     const params = {
-      amount: amount,
+      amount: stripedata.stripeamount,
       currency: 'usd',
       description: 'GearUp Car Rental',
       automatic_payment_methods: {

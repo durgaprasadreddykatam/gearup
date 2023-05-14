@@ -7,7 +7,7 @@ import {
 import { useRouter } from 'next/router';
 
 
-export default function Form({paymentIntent,stripedata,searchdata}) {
+export default function Form({paymentIntent,stripedata}) {
   const [email, setEmail] = useState('');
   const [locAmount, setLocAmount] = useState(0);
   const [message, setMessage] = useState(null);

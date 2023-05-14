@@ -9,25 +9,28 @@ export default function Indexcomp(props) {
     const [paymentIntent, setPaymentIntent] = useState('');
     const stripedata=props.stripedata;
     
-    
+    console.log(stripedata);
     useEffect(() => {
       // Create PaymentIntent as soon as the page loads using our local API
-      fetch('/api/stripe/stripe_intent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: props.amount,
-          payment_intent_id: '',
-          stripedata:stripedata,
-    
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setClientSecret(data.client_secret);
-          setPaymentIntent(data.id);
-        });
-    }, [props.amount]);
+      if(stripedata.stripeamount){
+        fetch('/api/stripe/stripe_intent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount:stripedata.stripeamount,
+            payment_intent_id: '',
+            stripedata:stripedata,
+      
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setClientSecret(data.client_secret);
+            setPaymentIntent(data.id);
+          });
+      }
+      
+    }, [stripedata.stripeamount]);
     
 
   const appearance = {
