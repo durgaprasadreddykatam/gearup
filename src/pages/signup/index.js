@@ -113,7 +113,7 @@ import axios from 'axios'
     console.log('error');
   }
 })
-    console.log(userdata);
+   
   }
   
 // this function will be invoked when user clicks on Login button on 3rd page

@@ -20,7 +20,6 @@ const Account = () => {
     function SaveChanges(){
       axios.post('/api/userdataupdate' , {id:userid,userdata:userdata,isActive:true})
       .then((response) => {
-        console.log(response.data.acknowledged);
         setTimeout(()=>{
           setIsActive(false);
           RenderNotification();
@@ -40,7 +39,6 @@ const Account = () => {
           localStorage.removeItem('user');
           window.location.href='/';
         }
-        console.log(response.data.acknowledged);
     }, (error) => {
       console.log(error);
     });

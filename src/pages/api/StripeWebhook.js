@@ -41,7 +41,7 @@ const handler = async (req, res) => {
     case 'payment_intent.succeeded,':
       const paymentMethod = event.data.object;
       const metadata = paymentIntent.metadata;
-      console.log(metadata);
+      
       console.log(
         `PaymentIntent was successfull for: ${data.data.object.amount}`
       );

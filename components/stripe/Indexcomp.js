@@ -9,7 +9,6 @@ export default function Indexcomp(props) {
     const [paymentIntent, setPaymentIntent] = useState('');
     const stripedata=props.stripedata;
     
-    console.log(stripedata);
     useEffect(() => {
       // Create PaymentIntent as soon as the page loads using our local API
       if(stripedata.stripeamount){

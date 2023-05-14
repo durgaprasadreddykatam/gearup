@@ -75,7 +75,6 @@ const CarPickerPage = () => {
     const cardata=data.filter((car)=>car.combinedCars.carid===carid);
     setPopupstate(true);
     setCarselected(cardata);
-    console.log(carselected);
     
   }
   

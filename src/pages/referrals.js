@@ -26,7 +26,6 @@ const Referrals = () => {
       }
       axios.post('/api/TripsApi', {userid: user.id})
           .then((res) => {
-            console.log(res.data);
             if(res.data.pastripsmessage==="Past Trips Found" || res.data.upcomingtripsmessage==="Upcoming Trips Found"){
               setIsFirstbooking(false);
               axios.post('/api/fertchreferralCode', {userid: user.id})
@@ -36,7 +35,7 @@ const Referrals = () => {
              });
     
     }, []);
-    console.log(isFirstbooking);
+    
 
     
   return (

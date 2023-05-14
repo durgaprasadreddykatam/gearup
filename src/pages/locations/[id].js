@@ -15,7 +15,6 @@ import cal from '../../../public/icons/kindpngcalender.png'
 const LocationDetails = () => {
     const router = useRouter();
     const id  = router.query.id;
-    console.log(data[id-1]);
     const[pageload,setpageload]=useState(true);
     useEffect(()=>{
         setpageload(false);

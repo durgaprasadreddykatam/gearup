@@ -12,7 +12,6 @@ const Locations = () => {
     }, []);
 
     function handleClick(id){
-        console.log(id)
         router.push(`/locations/${id}`)
     }
     
