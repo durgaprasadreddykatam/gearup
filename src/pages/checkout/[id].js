@@ -1,7 +1,6 @@
 import React ,{useState,useEffect} from 'react'
 import { useRouter } from 'next/router'
 import Footer1 from '../../../components/Footer1';
-import data from '../../../data/Checkoutdata';
 import { Oswald } from 'next/font/google'
 const oswald = Oswald({ subsets: ['latin'],weight:'300'  })
 import Image from 'next/image.js';
@@ -12,12 +11,11 @@ import Drivers from '../../../components/checkoutcomps/Drivers';
 import Deposit_policy from '../../../components/checkoutcomps/Deposit_policy';
 import Minage from '../../../components/checkoutcomps/Minage';
 import CancellationPolicy from '../../../components/checkoutcomps/CancellationPolicy';
-import DriverInfo from '../../../components/checkoutcomps/DriverInfo';
 import Indexcomp from '../../../components/stripe/Indexcomp';
 import axios from 'axios';
 import Popup from '../../../components/Popup';
 import Login from '../../../components/Login';
-import { set } from 'lodash';
+
 
 const Checkout = () => {
   const router = useRouter();
@@ -118,14 +116,16 @@ const Checkout = () => {
     }, [agemorethan25,unlimitedmiles,insurance]);
     const [payementpopup,setPayementpopup]=React.useState(false);
     const [totalpricepopup,setTotalpricepopup]=React.useState(false);
+    const[loginpopup,setLoginpopup]=React.useState(false);
     
     React.useEffect(() => {
-      if (popupv || payementpopup ||totalpricepopup) {
+      if (popupv || payementpopup ||totalpricepopup ||loginpopup) {
         document.body.style.overflow = 'hidden';
       } else {
         document.body.style.overflow = 'auto';
       }
-    }, [popupv,payementpopup,totalpricepopup]);
+    }, [popupv,payementpopup,totalpricepopup,loginpopup]);
+    
 
 const [finalprice, setFinalprice] = React.useState(Math.round((baseprice+salestax+youngrenterfee+unlimitedmilesfee+insuranceprice)*100)/100);
 const [stripefinalprice, setStripeFinalprice] = React.useState(Math.round((baseprice+salestax+youngrenterfee+unlimitedmilesfee+insuranceprice)*100));
@@ -157,7 +157,23 @@ const stripedata = authenticated ? {
                                     Unlimited_miles_selected:unlimitedmiles,
                                     amount:finalprice,
                                     stripeamount:stripefinalprice,
-                                  }:{};
+                                  }:{
+                                    DeliveryAddress:searchdata.address,
+                                    DeliveryCity:searchdata.city,
+                                    DeliveryDate:searchdata.fromDate,
+                                    DeliveryDateObj:searchdata.fromDateObj,
+                                    DeliveryCity:searchdata.city,
+                                    returnAddress:searchdata.isSameaddress ? searchdata.address:searchdata.address1,
+                                    returnCity:searchdata.isSameaddress ? searchdata.city:searchdata.city1,
+                                    returnDate:searchdata.todate,
+                                    returnDateObj:searchdata.toDateObj,
+                                    car_class:checkoutdata.catogary,
+                                    Coverage_selected:insurance,
+                                    isSameaddress:searchdata.isSameaddress,
+                                    no_of_days:days,
+                                    Unlimited_miles_selected:unlimitedmiles,
+                                    amount:finalprice,
+                                    stripeamount:stripefinalprice,};
                                   
     function Changecar(){
       router.push({pathname:'/CarPickerPage',query:searchdata});
@@ -234,7 +250,7 @@ const stripedata = authenticated ? {
                       <span className='text-blue-600'>{formatted_todate}</span>
                       <div className='mt-3'>Be ready to receive your Car +/- 15 min of the scheduled time</div>
                 </div>
-                {!authenticated && <button onClick={()=>{setPopup(true)}} className='w-full h-14 rounded-xl border-1 hover:bg-blue-600 hover:text-white'>Sign Up or Login To Continue</button>}
+                {!authenticated && <button onClick={()=>{setLoginpopup(true)}} className='w-full h-14 rounded-xl border-1 hover:bg-blue-600 hover:text-white'>Sign Up or Login To Continue</button>}
                 {/* {!authenticated && <DriverInfo driverinfo={driverinfo} HandleDriverinfo={HandleDriverinfo}/>} */}
                 {authenticated && finalprice !== 0 ? <Indexcomp  stripedata={stripedata} /> : null}
 
@@ -247,7 +263,7 @@ const stripedata = authenticated ? {
                 <div className='flex flex-col mt-5'>
                   <div className='flex justify-between'>
                     <div className='text-lg font-extrabold'>Total Price</div>
-                    <div>${finalprice}</div>
+                    <div>${stripedata.amount}</div>
                   </div>
                   <div onClick={()=>{setTotalpricepopup(true)}} className='mt-5 text-blue-600 font-extrabold cursor-pointer'>See Price Details</div>
                 </div>
@@ -255,27 +271,27 @@ const stripedata = authenticated ? {
         </div>
         
         
-        <div className={`${popupv ? `static `:`fixed`} flex lg:hidden justify-between items-center bottom-0 h-32 z-40 w-full p-10 bg-white`}>
+        <div className={`${popupv ? `static `:`fixed`} flex lg:hidden justify-between items-center bottom-0 h-32 z-40 w-full  bg-white`}>
           <div className='flex items-center justify-between'>
-            <div className='flex flex-col w-60'>
-              <div className='text-2xl flex items-center'>Total Price
+            <div className='flex flex-col w-40 lg:w-60'>
+              <div className='text-sm flex items-center'>Total Price
                 <Image onClick={()=>{setTotalpricepopup(true)}} src={`/icons/infopopup.png`} height={90} width={90} alt='' className='h-5 w-5 ml-3 cursor-pointer'/>
               </div>
-              <div>${finalprice}</div>
+              <div>${stripedata.amount}</div>
             </div>
             
-            {!authenticated && <button onClick={()=>{setPopup(true)}} className='w-44 h-14 rounded-xl border-1 hover:bg-blue-600 hover:text-white'>Sign Up or Login To Continue</button>}
+            {!authenticated && <button onClick={()=>{setLoginpopup(true)}} className='w-44 h-14 rounded-xl border-1 hover:bg-blue-600 hover:text-white'>Sign Up or Login To Continue</button>}
             {authenticated && <button onClick={()=>{setPayementpopup(true)}} className='w-44 h-14 rounded-xl border-1 bg-blue-600 text-white'>Book and Pay</button>}
           </div>
           
         </div>
-        <Popup trigger={popupv} onClose={()=>{setPopup(false)}}>
-              <div className='bg-white h-full md:h-fit'><Login onClick={()=>{setPopup(false)}}/></div>
+        <Popup trigger={loginpopup} onClose={()=>{setLoginpopup(false)}}>
+              <div className='bg-white h-full md:h-fit'><Login onClick={()=>{setLoginpopup(false)}}/></div>
         </Popup>
         <Popup trigger={payementpopup} onClose={()=>{setPayementpopup(false)}}>
               <div className='bg-white p-4 h-full relative md:h-fit'>
                 <Image onClick={()=>{setPayementpopup(false)}} className='h-8 w-8 mt-5 cursor-pointer top-5'  src={`/icons/close.png`} width={100} height={100} alt=''/>
-                {authenticated && finalprice !== 0 ? <Indexcomp searchdata={searchdata} amount={stripefinalprice} stripedata={stripedata} /> : null}
+                {/* {authenticated && finalprice !== 0 ? <Indexcomp  stripedata={stripedata} /> : null} */}
               </div>
         </Popup>
         <Popup trigger={totalpricepopup} onClose={()=>{setTotalpricepopup(false)}}>
@@ -305,7 +321,7 @@ const stripedata = authenticated ? {
                 </div>
                 <div className='w-screen px-10 mt-3   flex justify-between lg:w-80'>
                   <div className='text-xl font-extrabold'>Total Price</div>
-                  <div className='text-xl font-extrabold'>${finalprice}</div>
+                  <div className='text-xl font-extrabold'>${stripedata.amount}</div>
                 </div>
               </div>
         </Popup>

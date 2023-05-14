@@ -3,7 +3,10 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2020-08-27',
 });
 const handler = async (req, res) => {
+  
   const { amount, payment_intent_id ,stripedata } = req.body;
+console.log('Stripe data:', stripedata);
+console.log('Amount:', amount);
   const metadata = {
     stripedata: JSON.stringify(stripedata)
   };
@@ -18,7 +21,7 @@ const handler = async (req, res) => {
         const updated_intent = await stripe.paymentIntents.update(
           payment_intent_id,
           {
-            amount: amount,
+            amount: stripedata.stripeamount,
           }
         );
         res.status(200).json(updated_intent);

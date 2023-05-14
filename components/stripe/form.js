@@ -8,7 +8,6 @@ import { useRouter } from 'next/router';
 
 
 export default function Form({paymentIntent,stripedata}) {
-  const [email, setEmail] = useState('');
   const [locAmount, setLocAmount] = useState(0);
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -71,7 +70,7 @@ export default function Form({paymentIntent,stripedata}) {
       return;
     }
     setIsLoading(true);
-    const { error, paymentIntent } = await stripe.confirmPayment({
+    const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
         return_url:returnUrl,
